@@ -27,4 +27,7 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.junit)
+
+    //nav3
+    implementation(libs.navigation3.runtime)
 }

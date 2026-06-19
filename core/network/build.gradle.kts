@@ -27,4 +27,12 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.junit)
+
+    //retrofit
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.convert.gson)
+    implementation(libs.okHttp)
+
+    //koin
+    implementation(libs.koin.android)
 }

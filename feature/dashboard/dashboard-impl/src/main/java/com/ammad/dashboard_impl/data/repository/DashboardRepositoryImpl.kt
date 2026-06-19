@@ -1,0 +1,33 @@
+package com.ammad.dashboard_impl.data.repository
+
+import com.ammad.dashboard_impl.BuildConfig
+import com.ammad.dashboard_impl.data.remote.api.DashboardApiService
+import com.ammad.dashboard_impl.data.remote.dto.FoodItemDto
+import com.ammad.dashboard_impl.data.remote.dto.FoodSearchItemDto
+import com.ammad.dashboard_impl.domain.repository.DashboardRepository
+import com.ammad.network.ApiResult
+import com.ammad.network.safeApiCall
+
+
+class DashboardRepositoryImpl(
+    private val api: DashboardApiService
+) : DashboardRepository {
+
+    override suspend fun getFood(
+        foodId: Int,
+    ): ApiResult<FoodItemDto> {
+        return when(val result = safeApiCall { api.getFood(foodId, BuildConfig.API_KEY) }) {
+            is ApiResult.Success -> ApiResult.Success(result.data)
+            is ApiResult.Error -> ApiResult.Error(result.exception)
+        }
+    }
+
+    override suspend fun searchFood(
+        query: String
+    ): ApiResult<FoodSearchItemDto> {
+        return when(val result = safeApiCall { api.searchFood(BuildConfig.API_KEY, query) }) {
+            is ApiResult.Success -> ApiResult.Success(result.data)
+            is ApiResult.Error -> ApiResult.Error(result.exception)
+        }
+    }
+}

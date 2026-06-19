@@ -51,4 +51,17 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
     debugImplementation(libs.androidx.compose.ui.tooling)
+
+    //koin
+    implementation(libs.koin.android)
+
+    //nav3
+    implementation(libs.navigation3.runtime)
+    implementation(libs.navigation3.ui)
+    implementation(libs.navigation3.viewmodel)
+
+    //modules
+    implementation(project(":core:network"))
+    implementation(project(":core:navigation"))
+    implementation(project(":feature:dashboard:dashboard-impl"))
 }
