@@ -1,7 +1,5 @@
 package com.ammad.network
 
-import android.util.Log
-import android.util.Log.e
 import retrofit2.Response
 
 suspend fun <T> safeApiCall(apiCall: suspend () -> Response<T>): ApiResult<T> = try {

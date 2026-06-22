@@ -5,6 +5,9 @@ import com.ammad.dashboard_impl.domain.model.FoodSearchItem
 import com.ammad.shared.BaseState
 
 data class DashboardState(
-    val searchItems: List<FoodSearchItem> = emptyList(),
+    override val isLoading: Boolean = false,
+    override val errorMessage: String? = null,
+    val searchQuery: String = "",
+    val searchItems: FoodSearchItem = FoodSearchItem(),
     val foodItem: FoodItem = FoodItem(),
 ) : BaseState

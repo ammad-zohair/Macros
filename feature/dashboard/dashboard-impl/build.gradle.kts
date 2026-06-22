@@ -54,8 +54,14 @@ dependencies {
 
     //koin
     implementation(libs.koin.android)
+    implementation(libs.koin.androidx.compose)
+
+    //navigation
+    implementation(libs.navigation3.ui)
+    implementation(libs.navigation3.runtime)
 
     //modules
     implementation(project(":core:shared"))
     implementation(project(":core:navigation"))
+    implementation(project(":feature:dashboard:dashboard-api"))
 }

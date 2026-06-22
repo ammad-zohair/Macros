@@ -27,4 +27,17 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.junit)
+
+    //koin
+    implementation(libs.koin.android)
+    implementation(libs.koin.androidx.compose)
+
+    //navigation
+    implementation(libs.navigation3.ui)
+    implementation(libs.navigation3.runtime)
+
+    //modules
+    implementation(project(":core:shared"))
+    //implementation(project(":core:navigation"))
+    implementation(project(":feature:splash:splash-api"))
 }

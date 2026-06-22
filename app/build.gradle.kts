@@ -64,4 +64,5 @@ dependencies {
     implementation(project(":core:network"))
     implementation(project(":core:navigation"))
     implementation(project(":feature:dashboard:dashboard-impl"))
+    implementation(project(":feature:splash:splash-api"))
 }
