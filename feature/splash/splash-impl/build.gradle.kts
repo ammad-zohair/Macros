@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.compose)
 }
 
 android {
@@ -12,6 +13,9 @@ android {
         minSdk = 24
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+    buildFeatures {
+        compose = true
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
@@ -28,6 +32,13 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.junit)
 
+    //compose
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.compose.runtime)
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.lifecycle.runtime.compose)
+
     //koin
     implementation(libs.koin.android)
     implementation(libs.koin.androidx.compose)
@@ -38,6 +49,7 @@ dependencies {
 
     //modules
     implementation(project(":core:shared"))
-    //implementation(project(":core:navigation"))
+    implementation(project(":core:navigation"))
     implementation(project(":feature:splash:splash-api"))
+    implementation(project(":feature:dashboard:dashboard-api"))
 }
