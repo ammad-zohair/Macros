@@ -1,5 +1,5 @@
 package com.ammad.dashboard_impl.data.remote.dto
 
 data class Calories(
-    val value: Int
+    val value: Double? = 0.0
 )

@@ -23,7 +23,7 @@ data class FoodItem(
     val servingSizeUnit: String = "",
     val labelNutrients: LabelNutrients = LabelNutrients(
         calcium = Calcium(0.0),
-        calories = Calories(0),
+        calories = Calories(0.0),
         carbohydrates = Carbohydrates(0.0),
         cholesterol = Cholesterol(0.0),
         fat = Fat(0.0),

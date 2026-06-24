@@ -1,8 +1,10 @@
 package com.ammad.dashboard_impl.presentation
 
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,14 +14,17 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Search
@@ -31,10 +36,14 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.ListItem
+import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SearchBar
+import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -48,11 +57,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.semantics.isTraversalGroup
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.traversalIndex
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.design_system.theme.MacrosTheme
+import com.ammad.dashboard_impl.data.remote.dto.Food
+import com.ammad.dashboard_impl.data.remote.dto.LabelNutrients
+import com.ammad.dashboard_impl.domain.model.FoodItem
+import com.ammad.dashboard_impl.domain.model.FoodSearchItem
 
 @Composable
 fun DashboardScreen(
@@ -60,12 +73,22 @@ fun DashboardScreen(
     onIntent: (DashboardIntent) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-//    FoodDetailScreen(
-//        foodItem = state.foodItem,
-//
-//
-//    )
-
+    FoodDetailScreen(
+        foodItem = state.foodItem,
+        query = state.searchQuery,
+        onQueryChange = {
+            Log.d("DashboardScreen", "onQueryChange: $it")
+            onIntent(DashboardIntent.Search(it)) },
+        searchResult = state.searchItems,
+        onSearchItemClick = {
+            Log.d("DashboardScreen", "onItemclick: $it")
+            onIntent(DashboardIntent.GetFoodItem(it))
+                            },
+        isFavorite = state.isFavorite,
+        onFavoriteToggle = { onIntent(DashboardIntent.ToggleFavorite) },
+        onAddToLog = { onIntent(DashboardIntent.AddToLog) },
+        modifier = modifier
+    )
 }
 
 /**
@@ -73,28 +96,30 @@ fun DashboardScreen(
  * (collectAsStateWithLifecycle()) and the callbacks call into it. State is
  * hoisted here so every composable below stays stateless and previewable.
  */
-@Composable
-fun FoodDetailRoute(
-    foodItem: FoodItem = sampleFoodItem
-) {
-    var query by rememberSaveable { mutableStateOf("") }
-    var isFavorite by rememberSaveable { mutableStateOf(false) }
-
-    FoodDetailScreen(
-        foodItem = foodItem,
-        query = query,
-        onQueryChange = { query = it },
-        isFavorite = isFavorite,
-        onFavoriteToggle = { isFavorite = !isFavorite },
-        onAddToLog = { /* TODO: viewModel.addToDailyLog(foodItem) */ }
-    )
-}
+//@Composable
+//fun FoodDetailRoute(
+//    foodItem: FoodItem = sampleFoodItem
+//) {
+//    var query by rememberSaveable { mutableStateOf("") }
+//    var isFavorite by rememberSaveable { mutableStateOf(false) }
+//
+//    FoodDetailScreen(
+//        foodItem = foodItem,
+//        query = query,
+//        onQueryChange = { query = it },
+//        isFavorite = isFavorite,
+//        onFavoriteToggle = { isFavorite = !isFavorite },
+//        onAddToLog = { /* TODO: viewModel.addToDailyLog(foodItem) */ }
+//    )
+//}
 
 @Composable
 fun FoodDetailScreen(
     foodItem: FoodItem,
     query: String,
     onQueryChange: (String) -> Unit,
+    searchResult: FoodSearchItem,
+    onSearchItemClick: (Int) -> Unit,
     isFavorite: Boolean,
     onFavoriteToggle: () -> Unit,
     onAddToLog: () -> Unit,
@@ -103,44 +128,56 @@ fun FoodDetailScreen(
     Scaffold(
         modifier = modifier,
         containerColor = MaterialTheme.colorScheme.background,
-        topBar = { NutritionScoutTopBar() }
+        topBar = { CustomTopBar(title = "Macros") }
     ) { innerPadding ->
         Column(
             modifier = Modifier
                 .padding(innerPadding)
                 .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-                .padding(horizontal = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            Spacer(Modifier.height(8.dp))
-            FoodSearchField(query = query, onQueryChange = onQueryChange)
-            FoodDetailCard(
-                foodItem = foodItem,
-                isFavorite = isFavorite,
-                onFavoriteToggle = onFavoriteToggle,
-                onAddToLog = onAddToLog
+            CustomSearchBar(
+                query = query,
+                onQueryChange = onQueryChange,
+                onSearch = onQueryChange,
+                searchResults = searchResult.foods,
+                onResultClick = onSearchItemClick,
+                modifier = Modifier.padding(bottom = 16.dp),
             )
-            Spacer(Modifier.height(8.dp))
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
+                    .padding(horizontal = 16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                FoodDetailCard(
+                    foodItem = foodItem,
+                    isFavorite = isFavorite,
+                    onFavoriteToggle = onFavoriteToggle,
+                    onAddToLog = onAddToLog
+                )
+                Spacer(Modifier.height(8.dp))
+            }
         }
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun NutritionScoutTopBar() {
+private fun CustomTopBar(
+    modifier: Modifier = Modifier,
+    title: String
+) {
     TopAppBar(
         title = {
             Text(
-                text = "Nutrition Scout",
+                text = title,
                 style = MaterialTheme.typography.headlineMedium,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.primary
             )
         },
         actions = {
-            // Placeholder avatar. Replace with Coil's AsyncImage(model = url) once
-            // you add the coil-compose dependency.
             Box(
                 modifier = Modifier
                     .padding(end = 8.dp)
@@ -148,7 +185,16 @@ private fun NutritionScoutTopBar() {
                     .clip(CircleShape)
                     .background(MaterialTheme.colorScheme.surfaceContainerHighest)
                     .border(1.dp, MaterialTheme.colorScheme.outlineVariant, CircleShape)
-            )
+            ) {
+                Icon(
+                    imageVector = Icons.Default.AccountCircle,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                        .padding(2.dp)
+                )
+            }
         },
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.surface
@@ -206,8 +252,8 @@ private fun FoodDetailCard(
             verticalArrangement = Arrangement.spacedBy(32.dp)
         ) {
             FoodHeader(foodItem, isFavorite, onFavoriteToggle)
-            IngredientsSection(foodItem.ingredients)
-            MacrosSection(foodItem.macros)
+            IngredientsSection(foodItem.ingredients.split(",").map { it.trim() })
+            MacrosSection(foodItem.labelNutrients)
             AddToLogButton(onAddToLog)
         }
     }
@@ -226,12 +272,14 @@ private fun FoodHeader(
             verticalAlignment = Alignment.Top
         ) {
             Text(
-                text = foodItem.name,
+                text = foodItem.description,
                 style = MaterialTheme.typography.headlineLarge,
                 color = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier.weight(1f)
             )
-            IconButton(onClick = onFavoriteToggle) {
+            IconButton(
+                onClick = { onFavoriteToggle() }
+            ) {
                 Icon(
                     imageVector = Icons.Default.Favorite,
                     contentDescription = if (isFavorite) "Remove from favourites" else "Add to favourites",
@@ -246,7 +294,7 @@ private fun FoodHeader(
         ) {
             StatBlock(
                 label = "Total Calories",
-                value = "${foodItem.calories} kcal",
+                value = "${foodItem.labelNutrients.calories?.value} kcal",
                 valueColor = MaterialTheme.colorScheme.primary,
                 suffix = " / serving"
             )
@@ -256,7 +304,7 @@ private fun FoodHeader(
             )
             StatBlock(
                 label = "Total Serving",
-                value = foodItem.serving,
+                value = foodItem.servingSize + foodItem.servingSizeUnit,
                 valueColor = MaterialTheme.colorScheme.onSurface
             )
         }
@@ -341,19 +389,24 @@ private fun IngredientChip(text: String) {
 }
 
 @Composable
-private fun MacrosSection(macros: List<Macro>) {
+private fun MacrosSection(macros: LabelNutrients) {
     SectionContainer(title = "Nutritional Macros") {
         Column {
-            macros.forEach { macro ->
-                MacroRow(macro)
-                HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
-            }
+            MacroRow("Carbohydrates", macros.carbohydrates?.value)
+            MacroRow("Protein", macros.protein?.value)
+            MacroRow("Fat", macros.fat?.value)
+            MacroRow("Fiber", macros.fiber?.value)
+            MacroRow("Sugar", macros.sugars?.value)
+            MacroRow("Sodium", macros.sodium?.value)
         }
     }
 }
 
 @Composable
-private fun MacroRow(macro: Macro) {
+private fun MacroRow(
+    label: String,
+    value: Double?
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -362,22 +415,23 @@ private fun MacroRow(macro: Macro) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            text = macro.label,
+            text = label,
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
         Text(
-            text = macro.value,
+            text = value.toString(),
             style = MaterialTheme.typography.titleLarge,
             color = MaterialTheme.colorScheme.onSurface
         )
     }
+    HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
 }
 
 @Composable
 private fun AddToLogButton(onClick: () -> Unit) {
     Button(
-        onClick = onClick,
+        onClick = { onClick() },
         modifier = Modifier
             .fillMaxWidth()
             .height(56.dp),
@@ -393,54 +447,82 @@ private fun AddToLogButton(onClick: () -> Unit) {
     }
 }
 
-@Preview(showBackground = true, heightDp = 900)
+
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun FoodDetailScreenPreview() {
-    MacrosTheme {
-        FoodDetailScreen(
-            foodItem = sampleFoodItem,
-            query = "",
-            onQueryChange = {},
-            isFavorite = false,
-            onFavoriteToggle = {},
-            onAddToLog = {}
-        )
+fun CustomSearchBar(
+    query: String,
+    onQueryChange: (String) -> Unit,
+    onSearch: (String) -> Unit,
+    searchResults: List<Food>,
+    onResultClick: (Int) -> Unit,
+    modifier: Modifier = Modifier,
+    placeholder: @Composable () -> Unit = { Text(
+            text = "Search for food...",
+            style = MaterialTheme.typography.bodyMedium
+    ) },
+    leadingIcon: @Composable (() -> Unit)? = { Icon(
+        imageVector = Icons.Default.Search,
+        contentDescription = null,
+        tint = MaterialTheme.colorScheme.primary,
+    ) },
+    trailingIcon: @Composable (() -> Unit)? = null,
+    supportingContent: (@Composable (String) -> Unit)? = null,
+    leadingContent: (@Composable () -> Unit)? = null,
+) {
+    var expanded by rememberSaveable { mutableStateOf(false) }
+
+    Box(
+        modifier
+            .fillMaxWidth()
+            .semantics { isTraversalGroup = true }
+    ) {
+        SearchBar(
+            modifier = Modifier
+                .align(Alignment.TopCenter)
+                .semantics { traversalIndex = 0f },
+            inputField = {
+                SearchBarDefaults.InputField(
+                    query = query,
+                    onQueryChange = onQueryChange,
+                    onSearch = {
+                        onSearch(query)
+                        expanded = false
+                    },
+                    colors = SearchBarDefaults.inputFieldColors(
+                        unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainerLowest,
+                        focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerLowest,
+                    ),
+                    expanded = expanded,
+                    onExpandedChange = { expanded = it },
+                    placeholder = placeholder,
+                    leadingIcon = leadingIcon,
+                    trailingIcon = trailingIcon
+                )
+            },
+            expanded = expanded,
+            onExpandedChange = { expanded = it },
+        ) {
+            LazyColumn(modifier = Modifier.heightIn(max = 400.dp)) {
+                items(count = searchResults.size) { index ->
+                    val foodName = searchResults[index].description
+                    val foodId = searchResults[index].fdcId
+                    ListItem(
+                        headlineContent = { Text(foodName) },
+                        supportingContent = supportingContent?.let { { it(foodName) } },
+                        leadingContent = leadingContent,
+                        colors = ListItemDefaults.colors(containerColor = MaterialTheme.colorScheme.surfaceContainerLowest),
+                        modifier = Modifier
+                            .clickable {
+                                onResultClick(foodId)
+                                expanded = false
+                            }
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp, vertical = 4.dp)
+                    )
+                }
+            }
+        }
     }
 }
-
-data class FoodItem(
-    val name: String,
-    val calories: Int,
-    val serving: String,
-    val ingredients: List<String>,
-    val macros: List<Macro>
-)
-
-data class Macro(
-    val label: String,
-    val value: String
-)
-
-// Sample data used for @Preview and quick wiring before a ViewModel exists.
-val sampleFoodItem = FoodItem(
-    name = "Avocado Toast with Egg",
-    calories = 350,
-    serving = "1 Slice",
-    ingredients = listOf(
-        "Sourdough Bread",
-        "Ripe Avocado",
-        "Poached Egg",
-        "Red Chili Flakes",
-        "Sea Salt",
-        "Lemon Juice"
-    ),
-    macros = listOf(
-        Macro("Protein", "12g"),
-        Macro("Carbohydrates", "28g"),
-        Macro("Fat", "18g"),
-        Macro("Fiber", "7g"),
-        Macro("Sugar", "2g"),
-        Macro("Sodium", "140mg")
-    )
-)
 
