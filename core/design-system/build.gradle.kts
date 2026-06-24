@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.ammad.splash_impl"
+    namespace = "com.example.design_system"
     compileSdk {
         version = release(37)
     }
@@ -14,19 +14,21 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
-    buildFeatures {
-        compose = true
-    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
+    }
+    buildFeatures {
+        compose = true
     }
 
 }
 
 dependencies {
     implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.compose.ui.text)
     implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.material3)
     implementation(libs.material)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -38,19 +40,4 @@ dependencies {
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.lifecycle.runtime.compose)
-    implementation(libs.material.icons.core)
-
-    //koin
-    implementation(libs.koin.android)
-    implementation(libs.koin.androidx.compose)
-
-    //navigation
-    implementation(libs.navigation3.ui)
-    implementation(libs.navigation3.runtime)
-
-    //modules
-    implementation(project(":core:shared"))
-    implementation(project(":core:navigation"))
-    implementation(project(":feature:splash:splash-api"))
-    implementation(project(":feature:dashboard:dashboard-api"))
 }

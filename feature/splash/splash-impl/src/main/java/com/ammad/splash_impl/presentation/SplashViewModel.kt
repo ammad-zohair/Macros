@@ -1,5 +1,6 @@
 package com.ammad.splash_impl.presentation
 
+import com.ammad.dashboard_api.splash.api.DashboardRoute
 import com.ammad.navigation.AppNavigator
 import com.ammad.shared.BaseViewModel
 
@@ -8,7 +9,10 @@ class SplashViewModel(
 ) : BaseViewModel<SplashState, SplashIntent, SplashEffect>(SplashState())
 {
     override fun onIntent(intent: SplashIntent) {
-        TODO("Not yet implemented")
+        when (intent) {
+            SplashIntent.OnGetStartedClicked -> {
+                appNavigator.navigateAndClearStack(DashboardRoute)
+            }
+        }
     }
-
 }

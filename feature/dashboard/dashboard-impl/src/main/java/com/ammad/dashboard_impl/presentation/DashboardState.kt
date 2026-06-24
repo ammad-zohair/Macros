@@ -10,4 +10,5 @@ data class DashboardState(
     val searchQuery: String = "",
     val searchItems: FoodSearchItem = FoodSearchItem(),
     val foodItem: FoodItem = FoodItem(),
+    val isFavorite: Boolean = false
 ) : BaseState

@@ -12,8 +12,8 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import com.ammad.macros.navigation.AppNavigatorImpl
-import com.ammad.macros.ui.theme.MacrosTheme
 import com.ammad.navigation.AppNavigator
+import com.example.design_system.theme.MacrosTheme
 import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.android.inject
 
