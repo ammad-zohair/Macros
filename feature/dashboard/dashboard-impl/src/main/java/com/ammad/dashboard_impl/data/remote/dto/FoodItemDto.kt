@@ -17,11 +17,11 @@ data class FoodItemDto(
     val foodUpdateLog: List<FoodUpdateLog>,
     val gtinUpc: String,
     val householdServingFullText: String,
-    val ingredients: String,
-    val labelNutrients: LabelNutrients,
+    val ingredients: String?,
+    val labelNutrients: LabelNutrients?,
     val marketCountry: String,
     val modifiedDate: String,
     val publicationDate: String,
     val servingSize: Double,
-    val servingSizeUnit: String
+    val servingSizeUnit: String?
 )

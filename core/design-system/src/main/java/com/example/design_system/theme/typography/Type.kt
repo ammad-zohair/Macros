@@ -9,7 +9,6 @@ import androidx.compose.ui.unit.sp
 private val AppFontFamily = FontFamily.Default
 
 val AppTypography = androidx.compose.material3.Typography(
-    // "Avocado Toast with Egg"  -> headline-lg-mobile (28 / 700)
     headlineLarge = TextStyle(
         fontFamily = AppFontFamily,
         fontWeight = FontWeight.Bold,
@@ -17,14 +16,12 @@ val AppTypography = androidx.compose.material3.Typography(
         lineHeight = 36.sp,
         letterSpacing = (-0.02).em
     ),
-    // "Nutrition Scout" + calorie number -> headline-md (24 / 600)
     headlineMedium = TextStyle(
         fontFamily = AppFontFamily,
         fontWeight = FontWeight.SemiBold,
         fontSize = 24.sp,
         lineHeight = 32.sp
     ),
-    // Macro values + button label -> title-lg (20 / 600)
     titleLarge = TextStyle(
         fontFamily = AppFontFamily,
         fontWeight = FontWeight.SemiBold,
@@ -37,14 +34,12 @@ val AppTypography = androidx.compose.material3.Typography(
         fontSize = 16.sp,
         lineHeight = 24.sp
     ),
-    // Search field + macro labels -> body-md (14 / 400)
     bodyMedium = TextStyle(
         fontFamily = AppFontFamily,
         fontWeight = FontWeight.Normal,
         fontSize = 14.sp,
         lineHeight = 20.sp
     ),
-    // Section headers ("Ingredients", "Nutritional Macros") -> label-lg (14 / 600)
     labelLarge = TextStyle(
         fontFamily = AppFontFamily,
         fontWeight = FontWeight.SemiBold,
@@ -52,7 +47,6 @@ val AppTypography = androidx.compose.material3.Typography(
         lineHeight = 20.sp,
         letterSpacing = 0.1.sp
     ),
-    // "TOTAL CALORIES" + chip text -> label-sm (11 / 500)
     labelSmall = TextStyle(
         fontFamily = AppFontFamily,
         fontWeight = FontWeight.Medium,

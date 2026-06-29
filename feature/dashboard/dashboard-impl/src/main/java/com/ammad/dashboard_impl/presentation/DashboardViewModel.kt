@@ -27,11 +27,17 @@ class DashboardViewModel(
                 searchFood(intent.query)
             }
             is DashboardIntent.GetFoodItem -> {
+                Log.d("DashboardViewModel", "onIntent: $intent")
                 getFoodItem(intent.fdcId)
             }
-            is DashboardIntent.AddToLog -> {}
+            is DashboardIntent.AddToLog -> {
+                showToast("Feature Coming Soon!")
+            }
             is DashboardIntent.ToggleFavorite -> {
                 setState { copy(isFavorite = !isFavorite) }
+            }
+            is DashboardIntent.DismissError -> {
+                setState { copy(errorMessage = null) }
             }
         }
     }
@@ -42,12 +48,11 @@ class DashboardViewModel(
                 setState { copy(isLoading = true, errorMessage = null) }
                 when (val result = dashboardRepo.getFood(fdcId)) {
                     is ApiResult.Success -> {
+                        showToast("Fetched food item: ${result.data.description}")
                         setState { copy(foodItem = result.data) }
-                        Log.d("DashboardViewModel", "getFoodItem: $result")
                     }
                     is ApiResult.Error -> {
                         setState { copy(isLoading = false, errorMessage = result.exception.message) }
-                        Log.d("DashboardViewModel", "getFoodItemError: $result")
                     }
                 }
             } catch (e: Exception) {
@@ -78,11 +83,9 @@ class DashboardViewModel(
                 when (val result = dashboardRepo.searchFood(query)) {
                     is ApiResult.Success -> {
                         setState { copy(searchItems = result.data) }
-                        Log.d("DashboardViewModel", "searchFood: $result")
                     }
                     is ApiResult.Error -> {
                         setState { copy(isLoading = false, errorMessage = result.exception.message) }
-                        Log.d("DashboardViewModel", "searchFood: $result")
                     }
                 }
             } catch (e: Exception) {

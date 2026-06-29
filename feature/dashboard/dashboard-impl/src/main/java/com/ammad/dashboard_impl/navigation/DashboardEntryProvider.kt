@@ -4,6 +4,7 @@ import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavKey
 import com.ammad.dashboard_api.splash.api.DashboardRoute
 import com.ammad.dashboard_impl.presentation.DashboardEffect
+import com.ammad.dashboard_impl.presentation.DashboardIntent
 import com.ammad.dashboard_impl.presentation.DashboardScreen
 import com.ammad.dashboard_impl.presentation.DashboardViewModel
 import com.ammad.shared.BaseScreen
@@ -19,7 +20,8 @@ fun EntryProviderScope<NavKey>.dashboardEntry() {
                     is DashboardEffect.ShowToast -> {}
                     is DashboardEffect.NavigateTo -> {}
                 }
-            }
+            },
+            onErrorDismiss = { viewModel.onIntent(DashboardIntent.DismissError) }
         ) { state, onIntent ->
             DashboardScreen(state, onIntent)
         }

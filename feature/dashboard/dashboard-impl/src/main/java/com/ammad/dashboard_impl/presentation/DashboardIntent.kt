@@ -7,4 +7,5 @@ sealed interface DashboardIntent : BaseIntent {
     data class GetFoodItem(val fdcId: Int) : DashboardIntent
     data object ToggleFavorite : DashboardIntent
     data object AddToLog : DashboardIntent
+    data object DismissError : DashboardIntent
 }

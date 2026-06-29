@@ -44,4 +44,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.compose.foundation.layout)
     implementation(libs.androidx.compose.runtime.saveable)
+
+    //modules
+    implementation(project(":core:design-system"))
 }

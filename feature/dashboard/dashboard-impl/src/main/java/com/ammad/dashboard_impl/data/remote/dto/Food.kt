@@ -4,7 +4,7 @@ data class Food(
     val additionalDescriptions: String,
     val allHighlightFields: String,
     val brandName: String,
-    val brandOwner: String,
+    val brandOwner: String?,
     val commonNames: String,
     val dataSource: String,
     val dataType: String,

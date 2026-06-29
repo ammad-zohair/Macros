@@ -1,7 +1,13 @@
 package com.ammad.splash_impl.presentation
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.FastOutLinearInEasing
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -23,10 +29,12 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.ArrowForward
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -46,11 +54,12 @@ import com.ammad.splash_impl.R
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.milliseconds
+import com.example.design_system.component.CustomButton
 
 val pages = listOf(
-    SplashPage("Page 1", "Description 1", R.drawable.fruits, R.color.blue),
-    SplashPage("Page 2", "Description 2", R.drawable.salad, R.color.green),
-    SplashPage("Page 3", "Description 3", R.drawable.watermelon, R.color.yellow)
+    SplashPage("Search Foods Instantly", "Find your favourite foods and explore their complete nutritional profile in seconds", R.drawable.fruits, R.color.blue),
+    SplashPage("Track What Matters", "Get accurate calorie and macronutrient information to stay on top of your nutritional goals", R.drawable.salad, R.color.green),
+    SplashPage("Fuel your lifestyle", "Make smarter food choices with reliable nutrition data at your fingertips", R.drawable.watermelon, R.color.yellow)
 )
 
 @Composable
@@ -134,7 +143,7 @@ fun BottomSheet(
             .fillMaxWidth()
             .fillMaxHeight(0.25f),
         shape = RoundedCornerShape(topEnd = 50.dp),
-        colors = CardDefaults.cardColors(containerColor = colorResource(R.color.white)),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer),
         elevation = CardDefaults.cardElevation(defaultElevation = 10.dp)
     ) {
         Column(
@@ -144,22 +153,25 @@ fun BottomSheet(
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
                     text = pages[pagerState.currentPage].title,
-                    fontSize = 20.sp,
-                    color = colorResource(pages[pagerState.currentPage].color),
-                    fontWeight = FontWeight.Bold
+                    style = MaterialTheme.typography.titleLarge
                 )
                 Spacer(modifier = Modifier.width(100.dp))
-                PageIndicator(pagerState = pagerState, pages = pages)
+                PageIndicator(
+                    pagerState = pagerState,
+                    pages = pages,
+                    modifier = Modifier.padding(end = 4.dp)
+                )
             }
 
             Spacer(modifier = Modifier.height(20.dp))
             Text(
                 text = pages[pagerState.currentPage].description,
-                fontSize = 16.sp
+                style = MaterialTheme.typography.bodyLarge
             )
             Row(
                 verticalAlignment = Alignment.Bottom,
@@ -170,66 +182,36 @@ fun BottomSheet(
             ) {
                 val scope = rememberCoroutineScope()
                 if (pagerState.currentPage != 0) {
-                    TextButton(
+                    CustomButton(
                         onClick = {
                             scope.launch {
                                 pagerState.animateScrollToPage(pagerState.currentPage - 1)
-                            }
-                        }
-                    ) {
-                        Text(
-                            text = "Back",
-                            color = colorResource(pages[pagerState.currentPage].color)
-                        )
-                    }
+                            } },
+                        icon = Icons.Rounded.ArrowBack
+                    )
                 } else {
                     Spacer(modifier = Modifier.width(100.dp))
                 }
-                if (pagerState.currentPage != pages.size - 1) {
-                    Card(
-                        modifier = Modifier
-                            .clip(CircleShape)
-                            .clickable {
-                                scope.launch {
-                                    pagerState.animateScrollToPage(pagerState.currentPage + 1)
-                                }
-                            },
-                        colors = CardDefaults.cardColors(containerColor = colorResource(pages[pagerState.currentPage].color)),
-                        shape = CircleShape
-                    ) {
-                        Column(
-                            modifier = Modifier.padding(4.dp),
-                            verticalArrangement = Arrangement.Center,
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Card(
-                                shape = CircleShape
-                            ) {
-                                Column(
-                                    modifier = Modifier.padding(10.dp),
-                                    verticalArrangement = Arrangement.Center,
-                                    horizontalAlignment = Alignment.CenterHorizontally
-                                ) {
-                                    Icon(
-                                        modifier = Modifier.size(30.dp),
-                                        imageVector = Icons.Rounded.ArrowForward,
-                                        contentDescription = null,
-                                        tint = colorResource(pages[pagerState.currentPage].color)
-                                    )
-                                }
+                AnimatedVisibility (
+                    visible = pagerState.currentPage != pages.size - 1, enter = fadeIn(animationSpec = tween(100))) {
+                    CustomButton(
+                        onClick = {
+                            scope.launch {
+                                pagerState.animateScrollToPage(pagerState.currentPage + 1)
                             }
-                        }
-                    }
-                } else {
-                    TextButton(
-                        onClick = { onIntent(SplashIntent.OnGetStartedClicked) }
+                        },
+                        icon = Icons.Rounded.ArrowForward
+                    )
+                }
+                AnimatedVisibility (
+                    visible = pagerState.currentPage == pages.size - 1,
+                    enter = fadeIn(animationSpec = tween(200)) + slideInHorizontally(),
                     ) {
-                        Text(
-                            text = "Get Started!",
-                            color = colorResource(pages[pagerState.currentPage].color)
-                        )
-                    }
-
+                    CustomButton(
+                        onClick = { onIntent(SplashIntent.OnGetStartedClicked) },
+                        buttonText = "Get Started",
+                        icon = Icons.Rounded.ArrowForward
+                    )
                 }
             }
         }
@@ -239,9 +221,13 @@ fun BottomSheet(
 @Composable
 fun PageIndicator(
     pagerState: PagerState,
-    pages: List<SplashPage>
+    pages: List<SplashPage>,
+    modifier: Modifier = Modifier
 ) {
-    Box(contentAlignment = Alignment.CenterStart) {
+    Box(
+        modifier = modifier,
+        contentAlignment = Alignment.CenterStart
+    ) {
         Row(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalAlignment = Alignment.CenterVertically

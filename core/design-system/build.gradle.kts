@@ -33,6 +33,7 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.junit)
+    implementation(libs.material.icons.core)
 
     //compose
     implementation(platform(libs.androidx.compose.bom))
