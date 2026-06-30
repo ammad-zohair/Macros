@@ -24,4 +24,11 @@ dependencyResolutionManagement {
 
 rootProject.name = "Macros"
 include(":app")
- 
+include(":core:shared")
+include(":core:network")
+include(":core:navigation")
+include(":core:design-system")
+include(":feature:splash:splash-api")
+include(":feature:dashboard:dashboard-api")
+include(":feature:splash:splash-impl")
+include(":feature:dashboard:dashboard-impl")

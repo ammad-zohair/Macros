@@ -6,9 +6,7 @@ plugins {
 android {
     namespace = "com.ammad.macros"
     compileSdk {
-        version = release(36) {
-            minorApiLevel = 1
-        }
+        version = release(37)
     }
 
     defaultConfig {
@@ -53,4 +51,20 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
     debugImplementation(libs.androidx.compose.ui.tooling)
+
+    //koin
+    implementation(libs.koin.android)
+
+    //nav3
+    implementation(libs.navigation3.runtime)
+    implementation(libs.navigation3.ui)
+    implementation(libs.navigation3.viewmodel)
+
+    //modules
+    implementation(project(":core:network"))
+    implementation(project(":core:navigation"))
+    implementation(project(":core:design-system"))
+    implementation(project(":feature:dashboard:dashboard-impl"))
+    implementation(project(":feature:splash:splash-api"))
+    implementation(project(":feature:splash:splash-impl"))
 }
