@@ -21,7 +21,6 @@ android {
             val properties = Properties()
             properties.load(secretsFile.inputStream())
             properties.getProperty("API_KEY")
-           // "\"${properties.getProperty("API_KEY")}\""
         } else {
             "\"MISSING_KEY\""
         }

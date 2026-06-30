@@ -1,4 +1,4 @@
-package com.ammad.shared
+package com.ammad.shared.base
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

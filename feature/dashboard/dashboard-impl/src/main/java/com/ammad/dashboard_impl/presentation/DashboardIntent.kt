@@ -1,6 +1,6 @@
 package com.ammad.dashboard_impl.presentation
 
-import com.ammad.shared.BaseIntent
+import com.ammad.shared.base.BaseIntent
 
 sealed interface DashboardIntent : BaseIntent {
     data class Search(val query: String) : DashboardIntent

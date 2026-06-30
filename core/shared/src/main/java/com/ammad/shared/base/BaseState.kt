@@ -1,4 +1,4 @@
-package com.ammad.shared
+package com.ammad.shared.base
 
 interface BaseState {
     val isLoading: Boolean

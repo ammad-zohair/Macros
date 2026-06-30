@@ -38,15 +38,19 @@ fun FoodSearchBar(
     searchResults: List<Food>,
     onResultClick: (Int) -> Unit,
     modifier: Modifier = Modifier,
-    placeholder: @Composable () -> Unit = { Text(
-        text = "Search for food...",
-        style = MaterialTheme.typography.bodyMedium
-    ) },
-    leadingIcon: @Composable (() -> Unit)? = { Icon(
-        imageVector = Icons.Default.Search,
-        contentDescription = null,
-        tint = MaterialTheme.colorScheme.primary,
-    ) },
+    placeholder: @Composable () -> Unit = {
+        Text(
+            text = "Search for food...",
+            style = MaterialTheme.typography.bodyMedium
+        )
+    },
+    leadingIcon: @Composable (() -> Unit)? = {
+        Icon(
+            imageVector = Icons.Default.Search,
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.primary,
+        )
+    },
     trailingIcon: @Composable (() -> Unit)? = null,
     supportingContent: (@Composable (String) -> Unit)? = null,
     leadingContent: (@Composable () -> Unit)? = null,
@@ -66,10 +70,7 @@ fun FoodSearchBar(
                 SearchBarDefaults.InputField(
                     query = query,
                     onQueryChange = onQueryChange,
-                    onSearch = {
-                        onSearch(query)
-                        expanded = false
-                    },
+                    onSearch = { onSearch(query) },
                     colors = SearchBarDefaults.inputFieldColors(
                         unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainerLowest,
                         focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerLowest,

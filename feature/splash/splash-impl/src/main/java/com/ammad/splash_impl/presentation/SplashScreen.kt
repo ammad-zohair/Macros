@@ -4,13 +4,9 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.FastOutLinearInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,40 +22,49 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.ArrowForward
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import com.ammad.shared.extensions.slidingLineTransition
 import com.ammad.splash_impl.R
+import com.example.design_system.component.CustomButton
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.milliseconds
-import com.example.design_system.component.CustomButton
 
 val pages = listOf(
-    SplashPage("Search Foods Instantly", "Find your favourite foods and explore their complete nutritional profile in seconds", R.drawable.fruits, R.color.blue),
-    SplashPage("Track What Matters", "Get accurate calorie and macronutrient information to stay on top of your nutritional goals", R.drawable.salad, R.color.green),
-    SplashPage("Fuel your lifestyle", "Make smarter food choices with reliable nutrition data at your fingertips", R.drawable.watermelon, R.color.yellow)
+    SplashPage(
+        "Search Foods Instantly",
+        "Find your favourite foods and explore their complete nutritional profile in seconds",
+        R.drawable.fruits,
+        R.color.blue
+    ),
+    SplashPage(
+        "Track What Matters",
+        "Get accurate calorie and macronutrient information to stay on top of your nutritional goals",
+        R.drawable.salad,
+        R.color.green
+    ),
+    SplashPage(
+        "Fuel your lifestyle",
+        "Make smarter food choices with reliable nutrition data at your fingertips",
+        R.drawable.watermelon,
+        R.color.yellow
+    )
 )
 
 @Composable
@@ -186,14 +191,17 @@ fun BottomSheet(
                         onClick = {
                             scope.launch {
                                 pagerState.animateScrollToPage(pagerState.currentPage - 1)
-                            } },
+                            }
+                        },
                         icon = Icons.Rounded.ArrowBack
                     )
                 } else {
                     Spacer(modifier = Modifier.width(100.dp))
                 }
-                AnimatedVisibility (
-                    visible = pagerState.currentPage != pages.size - 1, enter = fadeIn(animationSpec = tween(100))) {
+                AnimatedVisibility(
+                    visible = pagerState.currentPage != pages.size - 1,
+                    enter = fadeIn(animationSpec = tween(100))
+                ) {
                     CustomButton(
                         onClick = {
                             scope.launch {
@@ -203,10 +211,10 @@ fun BottomSheet(
                         icon = Icons.Rounded.ArrowForward
                     )
                 }
-                AnimatedVisibility (
+                AnimatedVisibility(
                     visible = pagerState.currentPage == pages.size - 1,
                     enter = fadeIn(animationSpec = tween(200)) + slideInHorizontally(),
-                    ) {
+                ) {
                     CustomButton(
                         onClick = { onIntent(SplashIntent.OnGetStartedClicked) },
                         buttonText = "Get Started",
@@ -245,13 +253,10 @@ fun PageIndicator(
             Modifier
                 .slidingLineTransition(pagerState, distance = 47f)
                 .size(10.dp)
-                .background(colorResource(pages[pagerState.currentPage].color), RoundedCornerShape(10.dp))
+                .background(
+                    colorResource(pages[pagerState.currentPage].color),
+                    RoundedCornerShape(10.dp)
+                )
         )
     }
 }
-
-private fun Modifier.slidingLineTransition(pagerState: PagerState, distance: Float) =
-    graphicsLayer {
-        val scrollPosition = pagerState.currentPage + pagerState.currentPageOffsetFraction
-        translationX = scrollPosition * distance
-    }

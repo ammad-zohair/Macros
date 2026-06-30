@@ -15,7 +15,8 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun MacroRow(
     label: String,
-    value: Double?
+    value: Double?,
+    unit: String
 ) {
     Row(
         modifier = Modifier
@@ -30,7 +31,7 @@ fun MacroRow(
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
         Text(
-            text = value.toString(),
+            text = value.toString() + unit,
             style = MaterialTheme.typography.titleLarge,
             color = MaterialTheme.colorScheme.onSurface
         )

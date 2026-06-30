@@ -11,7 +11,6 @@ import java.util.concurrent.TimeUnit
 val networkModule = module {
     single {
         OkHttpClient.Builder()
-            //.addInterceptor { get<AuthInterceptor>() }
             .connectTimeout(TIMEOUT_SECONDS, TimeUnit.SECONDS)
             .build()
     }

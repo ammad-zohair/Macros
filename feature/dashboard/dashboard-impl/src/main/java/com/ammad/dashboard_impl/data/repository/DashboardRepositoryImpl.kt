@@ -17,10 +17,8 @@ class DashboardRepositoryImpl(
     override suspend fun getFood(
         foodId: Int,
     ): ApiResult<FoodItem> {
-        return when(val result = safeApiCall { api.getFood(foodId, BuildConfig.API_KEY) }) {
-            is ApiResult.Success -> {
-                ApiResult.Success(result.data.toDomain())
-            }
+        return when (val result = safeApiCall { api.getFood(foodId, BuildConfig.API_KEY) }) {
+            is ApiResult.Success -> ApiResult.Success(result.data.toDomain())
             is ApiResult.Error -> ApiResult.Error(result.exception)
         }
     }
@@ -28,7 +26,7 @@ class DashboardRepositoryImpl(
     override suspend fun searchFood(
         query: String
     ): ApiResult<FoodSearchItem> {
-        return when(val result = safeApiCall { api.searchFood(BuildConfig.API_KEY, query) }) {
+        return when (val result = safeApiCall { api.searchFood(BuildConfig.API_KEY, query) }) {
             is ApiResult.Success -> ApiResult.Success(result.data.toDomain())
             is ApiResult.Error -> ApiResult.Error(result.exception)
         }

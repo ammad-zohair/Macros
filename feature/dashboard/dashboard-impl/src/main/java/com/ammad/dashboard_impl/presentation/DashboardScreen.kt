@@ -1,6 +1,5 @@
 package com.ammad.dashboard_impl.presentation
 
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -31,13 +30,9 @@ fun DashboardScreen(
     FoodDetailScreen(
         foodItem = state.foodItem,
         query = state.searchQuery,
-        onQueryChange = {
-            Log.d("DashboardScreen", "onQueryChange: $it")
-            onIntent(DashboardIntent.Search(it)) },
+        onQueryChange = { onIntent(DashboardIntent.Search(it)) },
         searchResult = state.searchItems,
-        onSearchItemClick = {
-            Log.d("DashboardScreen", "onItemclick: $it")
-            onIntent(DashboardIntent.GetFoodItem(it)) },
+        onSearchItemClick = { onIntent(DashboardIntent.GetFoodItem(it)) },
         isFavorite = state.isFavorite,
         onFavoriteToggle = { onIntent(DashboardIntent.ToggleFavorite) },
         onAddToLog = { onIntent(DashboardIntent.AddToLog) },

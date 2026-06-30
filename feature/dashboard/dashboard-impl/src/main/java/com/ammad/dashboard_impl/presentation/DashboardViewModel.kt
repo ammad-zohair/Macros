@@ -6,7 +6,7 @@ import com.ammad.dashboard_impl.domain.model.FoodSearchItem
 import com.ammad.dashboard_impl.domain.repository.DashboardRepository
 import com.ammad.navigation.AppNavigator
 import com.ammad.network.ApiResult
-import com.ammad.shared.BaseViewModel
+import com.ammad.shared.base.BaseViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -26,16 +26,19 @@ class DashboardViewModel(
                 setState { copy(searchQuery = intent.query) }
                 searchFood(intent.query)
             }
+
             is DashboardIntent.GetFoodItem -> {
-                Log.d("DashboardViewModel", "onIntent: $intent")
                 getFoodItem(intent.fdcId)
             }
+
             is DashboardIntent.AddToLog -> {
                 showToast("Feature Coming Soon!")
             }
+
             is DashboardIntent.ToggleFavorite -> {
                 setState { copy(isFavorite = !isFavorite) }
             }
+
             is DashboardIntent.DismissError -> {
                 setState { copy(errorMessage = null) }
             }
@@ -51,8 +54,14 @@ class DashboardViewModel(
                         showToast("Fetched food item: ${result.data.description}")
                         setState { copy(foodItem = result.data) }
                     }
+
                     is ApiResult.Error -> {
-                        setState { copy(isLoading = false, errorMessage = result.exception.message) }
+                        setState {
+                            copy(
+                                isLoading = false,
+                                errorMessage = result.exception.message
+                            )
+                        }
                     }
                 }
             } catch (e: Exception) {
@@ -62,6 +71,7 @@ class DashboardViewModel(
             }
         }
     }
+
     private fun searchFood(query: String) {
         searchJob?.cancel()
 
@@ -84,12 +94,17 @@ class DashboardViewModel(
                     is ApiResult.Success -> {
                         setState { copy(searchItems = result.data) }
                     }
+
                     is ApiResult.Error -> {
-                        setState { copy(isLoading = false, errorMessage = result.exception.message) }
+                        setState {
+                            copy(
+                                isLoading = false,
+                            )
+                        }
                     }
                 }
             } catch (e: Exception) {
-                setState { copy(isLoading = false, errorMessage = e.message) }
+                setState { copy(isLoading = false,)}
             } finally {
                 setState { copy(isLoading = false) }
             }

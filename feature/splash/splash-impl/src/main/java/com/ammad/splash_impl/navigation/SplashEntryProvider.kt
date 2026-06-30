@@ -2,7 +2,7 @@ package com.ammad.splash_impl.navigation
 
 import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavKey
-import com.ammad.shared.BaseScreen
+import com.ammad.shared.base.BaseScreen
 import com.ammad.splash_api.splash.api.SplashRoute
 import com.ammad.splash_impl.presentation.SplashEffect
 import com.ammad.splash_impl.presentation.SplashScreen

@@ -7,7 +7,7 @@ import com.ammad.dashboard_impl.presentation.DashboardEffect
 import com.ammad.dashboard_impl.presentation.DashboardIntent
 import com.ammad.dashboard_impl.presentation.DashboardScreen
 import com.ammad.dashboard_impl.presentation.DashboardViewModel
-import com.ammad.shared.BaseScreen
+import com.ammad.shared.base.BaseScreen
 import org.koin.compose.viewmodel.koinViewModel
 
 fun EntryProviderScope<NavKey>.dashboardEntry() {
