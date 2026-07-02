@@ -30,7 +30,7 @@ class MainActivity : ComponentActivity() {
                 val entryBuilders = remember {
                     koin.getAll<EntryProviderScope<NavKey>.() -> Unit>()
                 }
-                val backStack = (appNavigator as AppNavigatorImpl).backStack
+                val backStack = appNavigator.backStack
 
                 NavDisplay(
                     backStack = backStack,

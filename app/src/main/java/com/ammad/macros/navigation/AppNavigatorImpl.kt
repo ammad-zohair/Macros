@@ -6,7 +6,7 @@ import com.ammad.navigation.AppNavigator
 
 class AppNavigatorImpl(initialRoute: NavKey) : AppNavigator {
 
-    val backStack = NavBackStack(initialRoute)
+    override val backStack = NavBackStack(initialRoute)
 
     override fun navigateTo(key: NavKey) {
         backStack.add(key)
