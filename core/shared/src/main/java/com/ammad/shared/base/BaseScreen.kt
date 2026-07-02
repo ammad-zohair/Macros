@@ -13,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.ammad.navigation.AppNavigator
 import com.example.design_system.component.AppToast
 import com.example.design_system.component.ErrorBanner
 import com.example.design_system.component.LoadingOverlay
@@ -23,9 +24,10 @@ import kotlin.time.Duration.Companion.milliseconds
 @Composable
 fun <S : BaseState, I : BaseIntent, E : BaseEffect> BaseScreen(
     viewModel: BaseViewModel<S, I, E>,
+    appNavigator: AppNavigator,
     onEffect: (E) -> Unit = {},
     onErrorDismiss: () -> Unit = {},
-    content: @Composable (state: S, onIntent: (I) -> Unit) -> Unit
+    content: @Composable (state: S, onIntent: (I) -> Unit) -> Unit,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
@@ -33,13 +35,28 @@ fun <S : BaseState, I : BaseIntent, E : BaseEffect> BaseScreen(
 
     LaunchedEffect(Unit) {
         launch {
-            viewModel.effect.collect(onEffect)
+            viewModel.effect.collect { effect ->
+                onEffect(effect)
+            }
         }
         launch {
-            viewModel.toast.collect { message ->
-                toastMessage = message
-                delay(2000.milliseconds)
-                toastMessage = null
+            viewModel.baseUIEffect.collect { effect ->
+                when (effect) {
+                    is BaseViewModelEffect.ShowToast -> {
+                        toastMessage = effect.message
+                        delay(2000.milliseconds)
+                        toastMessage = null
+                    }
+                    is BaseViewModelEffect.NavigateTo -> {
+                        if (effect.clearBackStack)
+                            appNavigator.navigateAndClearStack(effect.route)
+                        else
+                            appNavigator.navigateTo(effect.route)
+                    }
+
+                    else -> {
+                    }
+                }
             }
         }
     }

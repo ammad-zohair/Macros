@@ -36,6 +36,9 @@ dependencies {
     //vm
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
 
+    //navigation
+    implementation(libs.navigation3.runtime)
+
     //compose
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.runtime)
@@ -47,4 +50,5 @@ dependencies {
 
     //modules
     implementation(project(":core:design-system"))
+    implementation(project(":core:navigation"))
 }
