@@ -8,6 +8,7 @@ import com.ammad.dashboard_impl.presentation.DashboardScreen
 import com.ammad.dashboard_impl.presentation.DashboardViewModel
 import com.ammad.navigation.AppNavigator
 import com.ammad.shared.base.BaseScreen
+import com.example.design_system.component.BottomNavItem
 import org.koin.compose.viewmodel.koinViewModel
 
 fun EntryProviderScope<NavKey>.dashboardEntry(appNavigator: AppNavigator) {
@@ -16,10 +17,11 @@ fun EntryProviderScope<NavKey>.dashboardEntry(appNavigator: AppNavigator) {
         BaseScreen(
             viewModel = viewModel,
             appNavigator = appNavigator,
+            selectedBottomNavItem = BottomNavItem.SEARCH,
             onEffect = {},
             onErrorDismiss = { viewModel.onIntent(DashboardIntent.DismissError) }
-        ) { state, onIntent ->
-            DashboardScreen(state, onIntent)
+        ) { paddingValues, state, onIntent ->
+            DashboardScreen(paddingValues, state, onIntent)
         }
     }
 }

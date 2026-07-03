@@ -15,9 +15,11 @@ fun EntryProviderScope<NavKey>.splashEntry(appNavigator: AppNavigator) {
         BaseScreen(
             viewModel = viewModel,
             appNavigator = appNavigator,
+            showAppBars = false,
             onEffect = {}
-        ) { state, onIntent ->
+        ) { paddingValues, state, onIntent ->
             SplashScreen(
+                paddingValues = paddingValues,
                 state = state,
                 onIntent = onIntent
             )

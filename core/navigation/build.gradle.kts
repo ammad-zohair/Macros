@@ -30,4 +30,7 @@ dependencies {
 
     //nav3
     implementation(libs.navigation3.runtime)
+
+    //modules
+    implementation(project(":core:design-system"))
 }

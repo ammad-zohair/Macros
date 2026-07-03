@@ -1,8 +1,11 @@
 package com.ammad.shared.base
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -15,6 +18,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.ammad.navigation.AppNavigator
 import com.example.design_system.component.AppToast
+import com.example.design_system.component.BottomNavItem
+import com.example.design_system.component.CustomBottomNavigationBar
+import com.example.design_system.component.CustomTopBar
 import com.example.design_system.component.ErrorBanner
 import com.example.design_system.component.LoadingOverlay
 import kotlinx.coroutines.delay
@@ -25,9 +31,11 @@ import kotlin.time.Duration.Companion.milliseconds
 fun <S : BaseState, I : BaseIntent, E : BaseEffect> BaseScreen(
     viewModel: BaseViewModel<S, I, E>,
     appNavigator: AppNavigator,
+    showAppBars: Boolean = true,
+    selectedBottomNavItem: BottomNavItem? = null,
     onEffect: (E) -> Unit = {},
     onErrorDismiss: () -> Unit = {},
-    content: @Composable (state: S, onIntent: (I) -> Unit) -> Unit,
+    content: @Composable (paddingValues: PaddingValues, state: S, onIntent: (I) -> Unit) -> Unit,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
@@ -47,35 +55,52 @@ fun <S : BaseState, I : BaseIntent, E : BaseEffect> BaseScreen(
                         delay(2000.milliseconds)
                         toastMessage = null
                     }
+
                     is BaseViewModelEffect.NavigateTo -> {
                         if (effect.clearBackStack)
                             appNavigator.navigateAndClearStack(effect.route)
                         else
                             appNavigator.navigateTo(effect.route)
                     }
-
-                    else -> {
-                    }
                 }
             }
         }
     }
 
-    Box(modifier = Modifier.fillMaxSize()) {
-        content(state) {
-            viewModel.onIntent(it)
+    Scaffold(
+        containerColor = MaterialTheme.colorScheme.background,
+        topBar = { if (showAppBars) CustomTopBar(title = "Macros") },
+        bottomBar = {
+            if (showAppBars && selectedBottomNavItem != null) {
+                CustomBottomNavigationBar(
+                    selectedItem = selectedBottomNavItem,
+                    onItemSelected = { appNavigator.navigateToBottomNavItem(it) }
+                )
+            }
+        },
+    ) { innerPadding ->
+        Box(modifier = Modifier.fillMaxSize()) {
+            content(innerPadding, state) {
+                viewModel.onIntent(it)
+            }
+            ErrorBanner(
+                message = state.errorMessage,
+                onDismiss = onErrorDismiss,
+                modifier = Modifier
+                    .align(Alignment.TopCenter)
+                    .padding(top = innerPadding.calculateTopPadding())
+            )
+            LoadingOverlay(visible = state.isLoading)
+            AppToast(
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(
+                        bottom = 24.dp + innerPadding.calculateBottomPadding(),
+                        start = 16.dp,
+                        end = 16.dp
+                    ),
+                message = toastMessage
+            )
         }
-        ErrorBanner(
-            message = state.errorMessage,
-            onDismiss = onErrorDismiss,
-            modifier = Modifier.align(Alignment.TopCenter)
-        )
-        LoadingOverlay(visible = state.isLoading)
-        AppToast(
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .padding(bottom = 24.dp, start = 16.dp, end = 16.dp),
-            message = toastMessage
-        )
     }
 }

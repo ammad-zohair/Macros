@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -23,6 +24,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.semantics.isTraversalGroup
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.traversalIndex
@@ -83,6 +85,10 @@ fun FoodSearchBar(
                     trailingIcon = trailingIcon
                 )
             },
+            colors = SearchBarDefaults.colors(
+                containerColor = MaterialTheme.colorScheme.background,
+                dividerColor = MaterialTheme.colorScheme.outlineVariant
+            ),
             expanded = expanded,
             onExpandedChange = { expanded = it },
             windowInsets = WindowInsets(0, 0, 0, 0)
@@ -99,12 +105,13 @@ fun FoodSearchBar(
                         leadingContent = leadingContent,
                         colors = ListItemDefaults.colors(containerColor = MaterialTheme.colorScheme.surfaceContainerLowest),
                         modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp, vertical = 4.dp)
+                            .clip(RoundedCornerShape(16.dp))
                             .clickable {
                                 onResultClick(foodId)
                                 expanded = false
-                            }
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp, vertical = 4.dp)
+                            },
                     )
                 }
             }

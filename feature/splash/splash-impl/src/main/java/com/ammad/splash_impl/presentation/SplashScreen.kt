@@ -3,6 +3,7 @@ package com.ammad.splash_impl.presentation
 import androidx.compose.animation.core.FastOutLinearInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
@@ -39,6 +40,7 @@ val pages = listOf(
 
 @Composable
 fun SplashScreen(
+    paddingValues: PaddingValues,
     state: SplashState,
     onIntent: (SplashIntent) -> Unit,
     modifier: Modifier = Modifier,
