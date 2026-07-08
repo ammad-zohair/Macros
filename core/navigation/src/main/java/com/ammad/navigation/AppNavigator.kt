@@ -2,7 +2,7 @@ package com.ammad.navigation
 
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
-import com.example.design_system.component.BottomNavItem
+import com.example.design_system.components.BottomNavItem
 
 interface AppNavigator {
     val backStack: NavBackStack<NavKey>

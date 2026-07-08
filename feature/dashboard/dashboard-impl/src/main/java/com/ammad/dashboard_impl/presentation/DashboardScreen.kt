@@ -15,9 +15,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.ammad.dashboard_impl.domain.model.FoodItem
 import com.ammad.dashboard_impl.domain.model.FoodSearchItem
-import com.ammad.dashboard_impl.presentation.component.FoodDetailCard
-import com.ammad.dashboard_impl.presentation.component.FoodSearchBar
-import com.example.design_system.component.EmptyView
+import com.ammad.dashboard_impl.presentation.components.FoodDetailCard
+import com.ammad.dashboard_impl.presentation.components.FoodSearchBar
+import com.example.design_system.components.EmptyView
 
 @Composable
 fun DashboardScreen(
@@ -33,7 +33,7 @@ fun DashboardScreen(
         searchResult = state.searchItems,
         onSearchItemClick = { onIntent(DashboardIntent.GetFoodItem(it)) },
         isFavorite = state.isFavorite,
-        onFavoriteToggle = { onIntent(DashboardIntent.ToggleFavorite) },
+        onFavoriteToggle = { onIntent(DashboardIntent.ToggleFavorite(it)) },
         onAddToLog = { onIntent(DashboardIntent.AddToLog) },
         modifier = modifier.padding(paddingValues)
     )
@@ -47,7 +47,7 @@ fun FoodDetailScreen(
     searchResult: FoodSearchItem,
     onSearchItemClick: (Int) -> Unit,
     isFavorite: Boolean,
-    onFavoriteToggle: () -> Unit,
+    onFavoriteToggle: (FoodItem) -> Unit,
     onAddToLog: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -69,7 +69,7 @@ fun FoodDetailScreen(
                 .padding(horizontal = 16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            if (foodItem.fdcId == 0) EmptyView()
+            if (foodItem.fdcId == 0) EmptyView("No food selected")
             AnimatedVisibility(visible = foodItem.fdcId != 0) {
                 FoodDetailCard(
                     foodItem = foodItem,

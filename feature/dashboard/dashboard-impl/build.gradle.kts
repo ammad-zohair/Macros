@@ -12,7 +12,7 @@ android {
     }
 
     defaultConfig {
-        minSdk = 24
+        minSdk = 26
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -78,4 +78,5 @@ dependencies {
     implementation(project(":core:network"))
     implementation(project(":core:design-system"))
     implementation(project(":feature:dashboard:dashboard-api"))
+    implementation(project(":feature:favorite:favorite-api"))
 }

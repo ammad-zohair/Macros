@@ -8,7 +8,7 @@ import com.ammad.dashboard_impl.presentation.DashboardScreen
 import com.ammad.dashboard_impl.presentation.DashboardViewModel
 import com.ammad.navigation.AppNavigator
 import com.ammad.shared.base.BaseScreen
-import com.example.design_system.component.BottomNavItem
+import com.example.design_system.components.BottomNavItem
 import org.koin.compose.viewmodel.koinViewModel
 
 fun EntryProviderScope<NavKey>.dashboardEntry(appNavigator: AppNavigator) {

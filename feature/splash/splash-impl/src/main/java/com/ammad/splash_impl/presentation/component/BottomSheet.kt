@@ -30,7 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.ammad.splash_impl.presentation.SplashIntent
 import com.ammad.splash_impl.presentation.SplashPage
-import com.example.design_system.component.CustomButton
+import com.example.design_system.components.CustomButton
 import kotlinx.coroutines.launch
 
 @Composable

@@ -1,10 +1,13 @@
 package com.ammad.dashboard_impl.presentation
 
 import androidx.lifecycle.viewModelScope
+import com.ammad.dashboard_impl.data.mapper.toFavorite
+import com.ammad.dashboard_impl.domain.model.FoodItem
 import com.ammad.dashboard_impl.domain.model.FoodSearchItem
 import com.ammad.dashboard_impl.domain.repository.DashboardRepository
 import com.ammad.network.ApiResult
 import com.ammad.shared.base.BaseViewModel
+import com.example.favorite_api.domain.repository.FavoriteRepository
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -12,7 +15,8 @@ import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.milliseconds
 
 class DashboardViewModel(
-    private val dashboardRepo: DashboardRepository
+    private val dashboardRepo: DashboardRepository,
+    private val favoriteRepo: FavoriteRepository
 ) : BaseViewModel<DashboardState, DashboardIntent, DashboardEffect>(DashboardState()) {
 
     private var searchJob: Job? = null
@@ -33,7 +37,10 @@ class DashboardViewModel(
             }
 
             is DashboardIntent.ToggleFavorite -> {
-                setState { copy(isFavorite = !isFavorite) }
+                if (!state.value.isFavorite) {
+                    setState { copy(isFavorite = !isFavorite) }
+                    addFoodItemToFavorites(intent.foodItem)
+                }
             }
 
             is DashboardIntent.DismissError -> {
@@ -109,5 +116,22 @@ class DashboardViewModel(
                 setState { copy(isLoading = false) }
             }
         }
+    }
+
+    private fun addFoodItemToFavorites(foodItem: FoodItem) {
+        viewModelScope.launch {
+            try {
+                setState { copy(isLoading = true, errorMessage = null) }
+                favoriteRepo.addFavorite(foodItem.toFavorite())
+                showToast("Added ${foodItem.description} to favorites")
+                //setState { copy(isFavorite = true) }
+            } catch (e: Exception) {
+                setState { copy(errorMessage = e.message) }
+            } finally {
+                setState { copy(isLoading = false) }
+            }
+
+        }
+
     }
 }

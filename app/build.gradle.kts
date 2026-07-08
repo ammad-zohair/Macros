@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId = "com.ammad.macros"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
@@ -64,8 +64,11 @@ dependencies {
     implementation(project(":core:network"))
     implementation(project(":core:navigation"))
     implementation(project(":core:design-system"))
+    implementation(project(":core:database"))
     implementation(project(":feature:dashboard:dashboard-api"))
     implementation(project(":feature:dashboard:dashboard-impl"))
     implementation(project(":feature:splash:splash-api"))
     implementation(project(":feature:splash:splash-impl"))
+    implementation(project(":feature:favorite:favorite-api"))
+    implementation(project(":feature:favorite:favorite-impl"))
 }

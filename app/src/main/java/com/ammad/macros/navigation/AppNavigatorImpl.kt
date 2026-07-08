@@ -4,7 +4,8 @@ import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
 import com.ammad.dashboard_api.splash.api.DashboardRoute
 import com.ammad.navigation.AppNavigator
-import com.example.design_system.component.BottomNavItem
+import com.example.design_system.components.BottomNavItem
+import com.example.favorite_api.FavoriteRoute
 
 class AppNavigatorImpl(initialRoute: NavKey) : AppNavigator {
 
@@ -25,10 +26,9 @@ class AppNavigatorImpl(initialRoute: NavKey) : AppNavigator {
 
     override fun navigateToBottomNavItem(item: BottomNavItem) {
         when (item) {
-            BottomNavItem.SEARCH -> navigateTo(DashboardRoute)
+            BottomNavItem.SEARCH -> navigateAndClearStack(DashboardRoute)
+            BottomNavItem.FAVORITES -> navigateTo(FavoriteRoute)
             else -> {}
-            //BottomNavItem.FAVORITES -> navigateTo(FavoritesRoute)
-            //BottomNavItem.LOG -> navigateTo(LogRoute)
         }
     }
 }
