@@ -1,10 +1,7 @@
 package com.example.database.entity
 
-import android.os.Build
-import androidx.annotation.RequiresApi
-import androidx.room.Entity
-import androidx.room.PrimaryKey
-import kotlin.time.Clock
+import androidx.room3.Entity
+import androidx.room3.PrimaryKey
 import java.time.Instant
 
 @Entity(tableName = "log")
