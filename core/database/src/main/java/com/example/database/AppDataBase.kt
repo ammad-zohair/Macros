@@ -1,8 +1,8 @@
 package com.example.database
 
-import androidx.room.Database
-import androidx.room.RoomDatabase
-import androidx.room.TypeConverters
+import androidx.room3.Database
+import androidx.room3.RoomDatabase
+import androidx.room3.TypeConverters
 import com.example.database.converter.DateConverters
 import com.example.database.dao.FavoriteDao
 import com.example.database.dao.LogDao

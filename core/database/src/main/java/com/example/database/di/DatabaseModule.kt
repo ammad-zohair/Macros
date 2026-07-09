@@ -1,6 +1,6 @@
 package com.example.database.di
 
-import androidx.room.Room
+import androidx.room3.Room
 import com.example.database.AppDataBase
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
