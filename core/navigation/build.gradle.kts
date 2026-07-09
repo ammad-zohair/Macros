@@ -9,7 +9,7 @@ android {
     }
 
     defaultConfig {
-        minSdk = 24
+        minSdk = 26
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -30,4 +30,7 @@ dependencies {
 
     //nav3
     implementation(libs.navigation3.runtime)
+
+    //modules
+    implementation(project(":core:design-system"))
 }

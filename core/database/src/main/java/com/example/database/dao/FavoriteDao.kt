@@ -1,0 +1,20 @@
+package com.example.database.dao
+
+import androidx.room3.Dao
+import androidx.room3.Insert
+import androidx.room3.OnConflictStrategy
+import androidx.room3.Query
+import com.example.database.entity.FavoriteEntity
+import kotlinx.coroutines.flow.Flow
+
+@Dao
+interface FavoriteDao {
+    @Query("SELECT * FROM favorite")
+    fun observeFavorites(): Flow<List<FavoriteEntity>>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertFavorite(favoriteEntity: FavoriteEntity)
+
+    @Query("SELECT count(*) FROM favorite")
+    suspend fun getFavoriteCount(): Int
+}

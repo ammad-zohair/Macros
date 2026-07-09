@@ -5,6 +5,8 @@ import com.ammad.dashboard_impl.di.dashboardModule
 import com.ammad.macros.di.appModule
 import com.ammad.network.di.networkModule
 import com.ammad.splash_impl.di.splashModule
+import com.example.database.di.databaseModule
+import com.example.favorite_impl.di.favoriteModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 
@@ -15,8 +17,10 @@ class App : Application() {
             androidContext(this@App)
             modules(
                 networkModule,
+                databaseModule,
                 dashboardModule,
                 splashModule,
+                favoriteModule,
                 appModule
             )
         }

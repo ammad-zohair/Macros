@@ -10,7 +10,7 @@ kotlin = "2.2.10"
 composeBom = "2026.02.01"
 appcompat = "1.7.1"
 material = "1.14.0"
-room = "2.7.0"
+room = "3.0.0-alpha01"
 ksp = "2.3.5"
 koin = "4.2.2"
 lifecycleViewmodelNav3 = "2.10.0-rc01"
@@ -48,9 +48,8 @@ androidx-compose-material3 = { group = "androidx.compose.material3", name = "mat
 material-icons-core = { group = "androidx.compose.material", name = "material-icons-core" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
-androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
-androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
-androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+androidx-room3-runtime = { group = "androidx.room3", name = "room3-runtime", version.ref = "room" }
+androidx-room3-compiler = { group = "androidx.room3", name = "room3-compiler", version.ref = "room" }
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
 koin-androidx-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koin" }
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }

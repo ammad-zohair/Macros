@@ -1,6 +1,7 @@
 package com.ammad.network
 
 import retrofit2.Response
+import kotlin.coroutines.cancellation.CancellationException
 
 suspend fun <T> safeApiCall(apiCall: suspend () -> Response<T>): ApiResult<T> = try {
     val response = apiCall()
@@ -12,8 +13,11 @@ suspend fun <T> safeApiCall(apiCall: suspend () -> Response<T>): ApiResult<T> = 
             ApiResult.Error(Exception("Response body is null"))
         }
     } else {
-        ApiResult.Error(Exception(response.message()))
+        val errorBody = response.errorBody()?.string()
+        ApiResult.Error(Exception(errorBody ?: response.message()))
     }
+} catch (e: CancellationException) {
+    throw e
 } catch (e: Exception) {
     ApiResult.Error(e)
 }
