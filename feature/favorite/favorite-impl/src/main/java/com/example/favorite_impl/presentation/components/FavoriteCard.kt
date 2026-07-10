@@ -19,6 +19,7 @@ import com.example.favorite_api.domain.model.Favorite
 @Composable
 fun FavoriteCard(
     favoriteItem: Favorite,
+    onFavoriteToggle: (Favorite) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Card(
@@ -39,7 +40,7 @@ fun FavoriteCard(
                 servingSize = favoriteItem.servingSize,
                 servingSizeUnit = favoriteItem.servingSizeUnit,
                 isFavorite = true,
-                onFavoriteToggle = {}
+                onFavoriteToggle = { onFavoriteToggle(favoriteItem) }
             )
             MacrosSection(
                 carbohydrates = favoriteItem.carbohydrates,

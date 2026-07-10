@@ -7,4 +7,5 @@ interface FavoriteRepository {
     fun observeFavorites(): Flow<List<Favorite>>
     suspend fun addFavorite(favorite: Favorite)
     suspend fun getFavoriteCount(): Int
+    suspend fun deleteFavorite(favorite: Favorite)
 }

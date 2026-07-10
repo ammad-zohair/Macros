@@ -29,6 +29,7 @@ fun FavoriteScreen(
     FavoriteDetailScreen(
         favorites = state.favorites,
         favoriteCount = state.favoriteCount,
+        onFavoriteToggle = { onIntent(FavoriteIntent.DeleteFavorite(it)) },
         onExploreFoodsClick = { onIntent(FavoriteIntent.ExploreFoods) },
         modifier = modifier.padding(paddingValues)
     )
@@ -38,6 +39,7 @@ fun FavoriteScreen(
 private fun FavoriteDetailScreen(
     favorites: List<Favorite>,
     favoriteCount: Int,
+    onFavoriteToggle: (Favorite) -> Unit,
     onExploreFoodsClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -53,7 +55,10 @@ private fun FavoriteDetailScreen(
             FavoriteHeader(count = favoriteCount)
 
             favorites.forEach { favorite ->
-                FavoriteCard(favoriteItem = favorite)
+                FavoriteCard(
+                    favoriteItem = favorite,
+                    onFavoriteToggle = onFavoriteToggle
+                )
             }
             AddFavoriteCard(
                 onExploreFoodsClick = onExploreFoodsClick,

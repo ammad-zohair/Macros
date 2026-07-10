@@ -1,6 +1,7 @@
 package com.example.favorite_api.domain.model
 
 data class Favorite(
+    val id: Int = 0,
     val description: String,
     val servingSize: String = "",
     val servingSizeUnit: String = "",

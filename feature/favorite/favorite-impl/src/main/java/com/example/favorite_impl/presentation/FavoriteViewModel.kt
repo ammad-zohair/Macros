@@ -3,6 +3,7 @@ package com.example.favorite_impl.presentation
 import androidx.lifecycle.viewModelScope
 import com.ammad.dashboard_api.splash.api.DashboardRoute
 import com.ammad.shared.base.BaseViewModel
+import com.example.favorite_api.domain.model.Favorite
 import com.example.favorite_api.domain.repository.FavoriteRepository
 import kotlinx.coroutines.launch
 
@@ -19,6 +20,7 @@ class FavoriteViewModel(
         when (intent) {
             is FavoriteIntent.DismissError -> setState { copy(errorMessage = null) }
             is FavoriteIntent.ExploreFoods -> navigate(route = DashboardRoute, clearBackStack = true)
+            is FavoriteIntent.DeleteFavorite -> deleteFavorite(intent.favorite)
         }
     }
 
@@ -27,12 +29,10 @@ class FavoriteViewModel(
             try {
                 setState { copy(isLoading = true, errorMessage = null) }
                 favoriteRepository.observeFavorites().collect { favoritesList ->
-                    setState { copy(favorites = favoritesList) }
+                    setState { copy(favorites = favoritesList, isLoading = false) }
                 }
             } catch (e: Exception) {
-                setState { copy(errorMessage = e.message) }
-            } finally {
-                setState { copy(isLoading = false) }
+                setState { copy(errorMessage = e.message, isLoading = false) }
             }
         }
     }
@@ -43,6 +43,21 @@ class FavoriteViewModel(
                 setState { copy(isLoading = true, errorMessage = null) }
                 val count = favoriteRepository.getFavoriteCount()
                 setState { copy(favoriteCount = count) }
+            } catch (e: Exception) {
+                setState { copy(errorMessage = e.message) }
+            } finally {
+                setState { copy(isLoading = false) }
+            }
+        }
+    }
+
+    private fun deleteFavorite(favorite: Favorite) {
+        viewModelScope.launch {
+            try {
+                setState { copy(isLoading = true, errorMessage = null) }
+                favoriteRepository.deleteFavorite(favorite)
+                fetchFavoriteCount()
+                showToast("Deleted ${favorite.description} from favorites")
             } catch (e: Exception) {
                 setState { copy(errorMessage = e.message) }
             } finally {

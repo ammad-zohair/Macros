@@ -1,6 +1,7 @@
 package com.example.database.dao
 
 import androidx.room3.Dao
+import androidx.room3.Delete
 import androidx.room3.Insert
 import androidx.room3.OnConflictStrategy
 import androidx.room3.Query
@@ -17,4 +18,7 @@ interface FavoriteDao {
 
     @Query("SELECT count(*) FROM favorite")
     suspend fun getFavoriteCount(): Int
+
+    @Delete
+    suspend fun deleteFavorite(favoriteEntity: FavoriteEntity)
 }

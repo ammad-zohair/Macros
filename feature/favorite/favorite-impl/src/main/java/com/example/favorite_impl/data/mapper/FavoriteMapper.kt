@@ -5,6 +5,7 @@ import com.example.favorite_api.domain.model.Favorite
 
 fun FavoriteEntity.toDomain(): Favorite {
     return Favorite(
+        id = id,
         description = description,
         servingSize = servingSize,
         servingSizeUnit = servingSizeUnit,
@@ -19,6 +20,7 @@ fun FavoriteEntity.toDomain(): Favorite {
 
 fun Favorite.toEntity(): FavoriteEntity {
     return FavoriteEntity(
+        id = id,
         description = description,
         servingSize = servingSize,
         servingSizeUnit = servingSizeUnit,

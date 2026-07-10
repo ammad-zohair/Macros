@@ -24,4 +24,8 @@ class FavoriteRepositoryImpl(
     override suspend fun getFavoriteCount(): Int {
          return favoriteDao.getFavoriteCount()
     }
+
+    override suspend fun deleteFavorite(favorite: Favorite) {
+        return favoriteDao.deleteFavorite(favorite.toEntity())
+    }
 }
