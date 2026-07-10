@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
@@ -30,6 +31,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.traversalIndex
 import androidx.compose.ui.unit.dp
 import com.ammad.dashboard_impl.data.remote.dto.Food
+import com.ammad.shared.extensions.simpleVerticalScrollbar
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -59,6 +61,7 @@ fun FoodSearchBar(
     leadingContent: (@Composable () -> Unit)? = null,
 ) {
     var expanded by rememberSaveable { mutableStateOf(false) }
+    val listState = rememberLazyListState()
 
     Box(
         modifier
@@ -93,7 +96,10 @@ fun FoodSearchBar(
             onExpandedChange = { expanded = it },
             windowInsets = WindowInsets(0, 0, 0, 0)
         ) {
-            LazyColumn {
+            LazyColumn(
+                state = listState,
+                modifier = Modifier.simpleVerticalScrollbar(state = listState)
+            ) {
                 items(count = searchResults.size) { index ->
                     val foodName = searchResults[index].description
                     val foodId = searchResults[index].fdcId

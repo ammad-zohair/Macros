@@ -35,7 +35,7 @@ fun CustomBottomNavigationBar(
             .fillMaxWidth()
             .background(
                 color = MaterialTheme.colorScheme.surfaceContainerLow,
-                shape = RoundedCornerShape(28.dp)
+                shape = RoundedCornerShape(16.dp)
             )
             .padding(horizontal = 40.dp, vertical = 14.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
