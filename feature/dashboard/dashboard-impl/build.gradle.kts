@@ -79,4 +79,5 @@ dependencies {
     implementation(project(":core:design-system"))
     implementation(project(":feature:dashboard:dashboard-api"))
     implementation(project(":feature:favorite:favorite-api"))
+    implementation(project(":feature:log:log-api"))
 }

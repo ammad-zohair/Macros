@@ -71,4 +71,6 @@ dependencies {
     implementation(project(":feature:splash:splash-impl"))
     implementation(project(":feature:favorite:favorite-api"))
     implementation(project(":feature:favorite:favorite-impl"))
+    implementation(project(":feature:log:log-api"))
+    implementation(project(":feature:log:log-impl"))
 }

@@ -6,6 +6,7 @@ import com.ammad.dashboard_api.splash.api.DashboardRoute
 import com.ammad.navigation.AppNavigator
 import com.example.design_system.components.BottomNavItem
 import com.example.favorite_api.FavoriteRoute
+import com.example.log_api.LogRoute
 
 class AppNavigatorImpl(initialRoute: NavKey) : AppNavigator {
 
@@ -28,7 +29,7 @@ class AppNavigatorImpl(initialRoute: NavKey) : AppNavigator {
         when (item) {
             BottomNavItem.SEARCH -> navigateAndClearStack(DashboardRoute)
             BottomNavItem.FAVORITES -> navigateTo(FavoriteRoute)
-            else -> {}
+            BottomNavItem.LOG -> navigateTo(LogRoute)
         }
     }
 }

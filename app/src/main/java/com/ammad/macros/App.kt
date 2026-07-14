@@ -7,6 +7,7 @@ import com.ammad.network.di.networkModule
 import com.ammad.splash_impl.di.splashModule
 import com.example.database.di.databaseModule
 import com.example.favorite_impl.di.favoriteModule
+import com.example.log_impl.di.logModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 
@@ -21,6 +22,7 @@ class App : Application() {
                 dashboardModule,
                 splashModule,
                 favoriteModule,
+                logModule,
                 appModule
             )
         }

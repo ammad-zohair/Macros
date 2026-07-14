@@ -4,14 +4,18 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.design_system.components.CustomButton
 import com.example.design_system.components.FoodHeader
 import com.example.design_system.components.MacrosSection
 import com.example.favorite_api.domain.model.Favorite
@@ -20,6 +24,7 @@ import com.example.favorite_api.domain.model.Favorite
 fun FavoriteCard(
     favoriteItem: Favorite,
     onFavoriteToggle: (Favorite) -> Unit,
+    onAddToLog: (Favorite) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Card(
@@ -49,6 +54,14 @@ fun FavoriteCard(
                 fiber = 0.0,
                 sugar = favoriteItem.sugar,
                 sodium = favoriteItem.sodium
+            )
+            CustomButton(
+                onClick = { onAddToLog(favoriteItem) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp),
+                icon = Icons.Default.Add,
+                buttonText = "Add to Daily Log"
             )
         }
     }

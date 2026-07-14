@@ -5,10 +5,13 @@ import com.ammad.dashboard_api.splash.api.DashboardRoute
 import com.ammad.shared.base.BaseViewModel
 import com.example.favorite_api.domain.model.Favorite
 import com.example.favorite_api.domain.repository.FavoriteRepository
+import com.example.favorite_impl.data.mapper.toLog
+import com.example.log_api.domain.repository.LogRepository
 import kotlinx.coroutines.launch
 
 class FavoriteViewModel(
-    private val favoriteRepository: FavoriteRepository
+    private val favoriteRepository: FavoriteRepository,
+    private val logRepository: LogRepository
 ) : BaseViewModel<FavoriteState, FavoriteIntent, FavoriteEffect>(FavoriteState()) {
 
     init {
@@ -21,6 +24,7 @@ class FavoriteViewModel(
             is FavoriteIntent.DismissError -> setState { copy(errorMessage = null) }
             is FavoriteIntent.ExploreFoods -> navigate(route = DashboardRoute, clearBackStack = true)
             is FavoriteIntent.DeleteFavorite -> deleteFavorite(intent.favorite)
+            is FavoriteIntent.AddToLog -> addToLog(intent.favorite)
         }
     }
 
@@ -58,6 +62,20 @@ class FavoriteViewModel(
                 favoriteRepository.deleteFavorite(favorite)
                 fetchFavoriteCount()
                 showToast("Deleted ${favorite.description} from favorites")
+            } catch (e: Exception) {
+                setState { copy(errorMessage = e.message) }
+            } finally {
+                setState { copy(isLoading = false) }
+            }
+        }
+    }
+
+    private fun addToLog(favorite: Favorite) {
+        viewModelScope.launch {
+            try {
+                setState { copy(isLoading = true, errorMessage = null) }
+                logRepository.insertLog(favorite.toLog())
+                showToast("Added ${favorite.description} to log")
             } catch (e: Exception) {
                 setState { copy(errorMessage = e.message) }
             } finally {

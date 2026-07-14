@@ -15,6 +15,12 @@ import retrofit2.Retrofit
 val dashboardModule = module {
     single { get<Retrofit>().create(DashboardApiService::class.java) }
     single<DashboardRepository> { DashboardRepositoryImpl(get()) }
-    viewModel { DashboardViewModel(get(), get()) }
+    viewModel {
+        DashboardViewModel(
+            dashboardRepo = get(),
+            favoriteRepo = get(),
+            logRepo = get()
+        )
+    }
     single<EntryProviderScope<NavKey>.() -> Unit>(named("dashboardEntry")) { { dashboardEntry(get()) } }
 }

@@ -2,12 +2,14 @@ package com.ammad.dashboard_impl.presentation
 
 import androidx.lifecycle.viewModelScope
 import com.ammad.dashboard_impl.data.mapper.toFavorite
+import com.ammad.dashboard_impl.data.mapper.toLog
 import com.ammad.dashboard_impl.domain.model.FoodItem
 import com.ammad.dashboard_impl.domain.model.FoodSearchItem
 import com.ammad.dashboard_impl.domain.repository.DashboardRepository
 import com.ammad.network.ApiResult
 import com.ammad.shared.base.BaseViewModel
 import com.example.favorite_api.domain.repository.FavoriteRepository
+import com.example.log_api.domain.repository.LogRepository
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -20,7 +22,8 @@ import kotlin.time.Duration.Companion.milliseconds
 @OptIn(FlowPreview::class)
 class DashboardViewModel(
     private val dashboardRepo: DashboardRepository,
-    private val favoriteRepo: FavoriteRepository
+    private val favoriteRepo: FavoriteRepository,
+    private val logRepo: LogRepository
 ) : BaseViewModel<DashboardState, DashboardIntent, DashboardEffect>(DashboardState()) {
 
     private val searchQueryFlow = MutableSharedFlow<String>(extraBufferCapacity = 1)
@@ -47,7 +50,7 @@ class DashboardViewModel(
             }
 
             is DashboardIntent.AddToLog -> {
-                showToast("Feature Coming Soon!")
+                addFoodItemToLog(intent.foodItem)
             }
 
             is DashboardIntent.ToggleFavorite -> {
@@ -131,6 +134,20 @@ class DashboardViewModel(
 
         }
 
+    }
+
+    private fun addFoodItemToLog(foodItem: FoodItem) {
+        viewModelScope.launch {
+            try {
+                setState { copy(isLoading = true, errorMessage = null) }
+                logRepo.insertLog(foodItem.toLog())
+                showToast("Added ${foodItem.description} to log")
+            } catch (e: Exception) {
+                setState { copy(errorMessage = e.message) }
+            } finally {
+                setState { copy(isLoading = false) }
+            }
+        }
     }
 
     private fun processSearchIntent(query: String) {

@@ -34,7 +34,7 @@ fun DashboardScreen(
         onSearchItemClick = { onIntent(DashboardIntent.GetFoodItem(it)) },
         isFavorite = state.isFavorite,
         onFavoriteToggle = { onIntent(DashboardIntent.ToggleFavorite(it)) },
-        onAddToLog = { onIntent(DashboardIntent.AddToLog) },
+        onAddToLog = { onIntent(DashboardIntent.AddToLog(it)) },
         modifier = modifier.padding(paddingValues)
     )
 }
@@ -48,7 +48,7 @@ fun FoodDetailScreen(
     onSearchItemClick: (Int) -> Unit,
     isFavorite: Boolean,
     onFavoriteToggle: (FoodItem) -> Unit,
-    onAddToLog: () -> Unit,
+    onAddToLog: (FoodItem) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(

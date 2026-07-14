@@ -25,7 +25,7 @@ fun FoodDetailCard(
     foodItem: FoodItem,
     isFavorite: Boolean,
     onFavoriteToggle: (FoodItem) -> Unit,
-    onAddToLog: () -> Unit,
+    onAddToLog: (FoodItem) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Card(
@@ -58,7 +58,7 @@ fun FoodDetailCard(
                 sodium = foodItem.labelNutrients.sodium?.value
             )
             CustomButton(
-                onClick = onAddToLog,
+                onClick = { onAddToLog(foodItem) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp),

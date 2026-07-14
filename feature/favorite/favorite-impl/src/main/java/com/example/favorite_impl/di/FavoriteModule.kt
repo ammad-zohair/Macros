@@ -13,5 +13,5 @@ import org.koin.core.qualifier.named
 val favoriteModule = module {
     single<FavoriteRepository> { FavoriteRepositoryImpl(get()) }
     single<EntryProviderScope<NavKey>.() -> Unit>(named("favoriteEntry")) { { favoriteEntry(get()) } }
-    viewModel { FavoriteViewModel(get()) }
+    viewModel { FavoriteViewModel(get(), get()) }
 }

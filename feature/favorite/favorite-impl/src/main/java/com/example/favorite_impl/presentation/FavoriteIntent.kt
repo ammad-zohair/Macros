@@ -7,4 +7,5 @@ sealed interface FavoriteIntent : BaseIntent {
     data object DismissError : FavoriteIntent
     data object ExploreFoods : FavoriteIntent
     data class DeleteFavorite(val favorite: Favorite) : FavoriteIntent
+    data class AddToLog(val favorite: Favorite) : FavoriteIntent
 }

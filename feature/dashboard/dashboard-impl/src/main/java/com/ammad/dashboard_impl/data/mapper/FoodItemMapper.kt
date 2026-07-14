@@ -6,6 +6,8 @@ import com.ammad.dashboard_impl.data.remote.dto.LabelNutrients
 import com.ammad.dashboard_impl.domain.model.FoodItem
 import com.ammad.dashboard_impl.domain.model.FoodSearchItem
 import com.example.favorite_api.domain.model.Favorite
+import com.example.log_api.domain.model.Log
+import java.time.Instant
 
 fun FoodItemDto.toDomain(): FoodItem {
     return FoodItem(
@@ -35,5 +37,15 @@ fun FoodItem.toFavorite(): Favorite {
         fat = labelNutrients.fat?.value ?: 0.0,
         sugar = labelNutrients.sugars?.value ?: 0.0,
         sodium = labelNutrients.sodium?.value ?: 0.0
+    )
+}
+
+fun FoodItem.toLog(): Log {
+    return Log(
+        description = description,
+        calories = labelNutrients.calories?.value ?: 0.0,
+        carbohydrates = labelNutrients.carbohydrates?.value ?: 0.0,
+        protein = labelNutrients.protein?.value ?: 0.0,
+        loggedAt = Instant.now()
     )
 }
