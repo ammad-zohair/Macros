@@ -14,6 +14,7 @@ data class LogState(
     val targetProtein: Int = 100,
     val targetCarbohydrates: Int = 100,
     val calorieProgress: Float = 0.0f,
+    val isEdit: Boolean = false,
     val macros: List<MacroDisplay> = emptyList(),
     val entries: List<Log> = emptyList()
 ) : BaseState

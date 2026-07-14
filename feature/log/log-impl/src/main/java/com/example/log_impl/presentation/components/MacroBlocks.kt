@@ -10,6 +10,7 @@ import com.example.log_api.domain.model.MacroDisplay
 
 @Composable
 fun MacroBlocks(
+    isEditMode: Boolean,
     macros: List<MacroDisplay>,
     targetCarbohydrates: Int,
     targetProtein: Int,
@@ -22,12 +23,14 @@ fun MacroBlocks(
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         MacroCard(
+            isEditMode = isEditMode,
             macro = macros[0],
             targetMacro = targetProtein,
             onMacroSliderChange = onProteinSliderChange,
             modifier = Modifier.weight(1f)
         )
         MacroCard(
+            isEditMode = isEditMode,
             macro = macros[1],
             targetMacro = targetCarbohydrates,
             onMacroSliderChange = onCarbohydrateSliderChange,

@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
@@ -21,12 +22,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.unit.dp
 import com.example.log_api.domain.model.MacroDisplay
 
 
 @Composable
 fun MacroCard(
+    isEditMode: Boolean,
     macro: MacroDisplay,
     targetMacro: Int,
     onMacroSliderChange: (Float) -> Unit,
@@ -47,7 +50,7 @@ fun MacroCard(
             color = MaterialTheme.colorScheme.onSecondaryContainer
         )
         Spacer(Modifier.height(4.dp))
-        Row {
+        Row(verticalAlignment = Alignment.Bottom) {
             Text(
                 text = macro.value,
                 style = MaterialTheme.typography.titleLarge,
@@ -59,30 +62,33 @@ fun MacroCard(
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }
-        Spacer(Modifier.height(8.dp))
-        Slider(
-            value = macro.progress,
-            onValueChange = {
-                sliderPosition = it
-                onMacroSliderChange(it)
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(4.dp)
-                .clip(RoundedCornerShape(50)),
-            enabled = true,
-            valueRange = 5f..1000f,
-            colors = SliderDefaults.colors(activeTickColor = MaterialTheme.colorScheme.outlineVariant)
-        )
-//        LinearProgressIndicator(
-//            progress = { macro.progress },
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .height(4.dp)
-//                .clip(RoundedCornerShape(50)),
-//            color = MaterialTheme.colorScheme.secondary,
-//            trackColor = MaterialTheme.colorScheme.outlineVariant,
-//            strokeCap = StrokeCap.Round
-//        )
+        Spacer(Modifier.height(16.dp))
+        if (isEditMode) {
+            Slider(
+                value = macro.progress,
+                onValueChange = {
+                    sliderPosition = it
+                    onMacroSliderChange(it)
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(4.dp)
+                    .clip(RoundedCornerShape(50)),
+                enabled = true,
+                valueRange = 1f..500f,
+                colors = SliderDefaults.colors(activeTickColor = MaterialTheme.colorScheme.outlineVariant)
+            )
+        } else {
+            LinearProgressIndicator(
+                progress = { macro.progress },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(4.dp)
+                    .clip(RoundedCornerShape(50)),
+                color = MaterialTheme.colorScheme.secondary,
+                trackColor = MaterialTheme.colorScheme.outlineVariant,
+                strokeCap = StrokeCap.Round
+            )
+        }
     }
 }

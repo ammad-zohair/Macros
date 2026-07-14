@@ -1,5 +1,6 @@
 package com.example.log_impl.presentation
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -12,7 +13,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Done
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Error
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -38,6 +42,7 @@ fun LogScreen(
     modifier: Modifier = Modifier,
 ) {
     LogDetailScreen(
+        isEditMode = state.isEdit,
         dailyLogEntries = state.entries,
         macros = state.macros,
         dayLabel = state.selectedDate.toDayLabel(),
@@ -59,6 +64,7 @@ fun LogScreen(
 
 @Composable
 private fun LogDetailScreen(
+    isEditMode: Boolean,
     dailyLogEntries: List<Log>,
     macros: List<MacroDisplay>,
     dayLabel: String?,
@@ -113,13 +119,34 @@ private fun LogDetailScreen(
 
             Spacer(Modifier.height(16.dp))
 
-            Text(
-                text = "Nutrient Breakdown",
-                style = MaterialTheme.typography.titleLarge,
-                color = MaterialTheme.colorScheme.onSurface
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "Nutrient Breakdown",
+                    style = MaterialTheme.typography.titleLarge,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+                Row(
+                    modifier = Modifier
+                        .clickable(
+                            onClick = {
+
+                            }
+                        )
+                ) {
+                    Icon(
+                        imageVector = if (isEditMode) Icons.Default.Done else Icons.Default.Edit,
+                        tint = MaterialTheme.colorScheme.primary,
+                        contentDescription = null
+                    )
+                }
+            }
 
             MacroBlocks(
+                isEditMode = isEditMode,
                 macros = macros,
                 targetCarbohydrates = targetCarbohydrates,
                 targetProtein = targetProtein,
