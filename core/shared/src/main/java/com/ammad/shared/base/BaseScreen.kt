@@ -4,6 +4,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -14,6 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.ammad.navigation.AppNavigator
@@ -32,6 +35,8 @@ fun <S : BaseState, I : BaseIntent, E : BaseEffect> BaseScreen(
     viewModel: BaseViewModel<S, I, E>,
     appNavigator: AppNavigator,
     showAppBars: Boolean = true,
+    topBarIcon: ((S) -> ImageVector)? = null,
+    onTopBarIconClick: () -> Unit = {},
     selectedBottomNavItem: BottomNavItem? = null,
     onEffect: (E) -> Unit = {},
     onErrorDismiss: () -> Unit = {},
@@ -69,7 +74,15 @@ fun <S : BaseState, I : BaseIntent, E : BaseEffect> BaseScreen(
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
-        topBar = { if (showAppBars) CustomTopBar(title = "Macros") },
+        topBar = {
+            if (showAppBars) {
+                CustomTopBar(
+                    title = "Macros",
+                    topBarIcon = topBarIcon?.invoke(state) ?: Icons.Default.AccountCircle,
+                    onIconClick = onTopBarIconClick
+                )
+            }
+        },
         bottomBar = {
             if (showAppBars && selectedBottomNavItem != null) {
                 CustomBottomNavigationBar(

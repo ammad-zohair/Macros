@@ -1,5 +1,8 @@
 package com.example.log_impl.navigation
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Edit
 import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavKey
 import com.ammad.navigation.AppNavigator
@@ -17,6 +20,8 @@ fun EntryProviderScope<NavKey>.logEntry(appNavigator: AppNavigator) {
         BaseScreen(
             viewModel = viewModel,
             appNavigator = appNavigator,
+            topBarIcon = { state -> if (state.isEdit) Icons.Default.Check else Icons.Default.Edit },
+            onTopBarIconClick = { viewModel.onIntent(LogIntent.OnEditClick) },
             selectedBottomNavItem = BottomNavItem.LOG,
             onEffect = {},
             onErrorDismiss = { viewModel.onIntent(LogIntent.DismissError) }
