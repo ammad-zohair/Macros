@@ -2,6 +2,7 @@ package com.example.log_impl.presentation.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -19,24 +20,48 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Slider
+import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.ammad.shared.extensions.shake
+import com.ammad.shared.extensions.thenIf
+import com.ammad.shared.shake.ShakeConfig
+import com.ammad.shared.shake.rememberShakeController
 
 @Composable
 fun DailyGoalCard(
+    isEditMode: Boolean,
     consumedCalories: Int,
     targetCalories: Int,
     progress: Float,
+    onMacroSliderChange: (Float) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    var sliderPosition by remember { mutableFloatStateOf(progress) }
+    val shakeController = rememberShakeController()
+
+    LaunchedEffect(isEditMode) {
+        if (isEditMode) {
+            shakeController.shake(ShakeConfig(20, translateX = 2f))
+        }
+    }
+
     Card(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier
+            .fillMaxWidth()
+            .shake(shakeController),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLowest),
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
@@ -93,16 +118,33 @@ fun DailyGoalCard(
 
             Spacer(Modifier.height(16.dp))
 
-            LinearProgressIndicator(
-                progress = { progress },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(16.dp)
-                    .clip(RoundedCornerShape(50)),
-                color = MaterialTheme.colorScheme.primary,
-                trackColor = MaterialTheme.colorScheme.surfaceContainerHigh,
-                strokeCap = StrokeCap.Round
-            )
+            if (isEditMode) {
+                Slider(
+                    value = sliderPosition,
+                    onValueChange = {
+                        sliderPosition = it
+                        onMacroSliderChange(it)
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(16.dp)
+                        .clip(RoundedCornerShape(50)),
+                    enabled = true,
+                    valueRange = 500f..5000f,
+                    colors = SliderDefaults.colors(activeTickColor = MaterialTheme.colorScheme.surfaceContainerHigh)
+                )
+            } else {
+                LinearProgressIndicator(
+                    progress = { progress },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(16.dp)
+                        .clip(RoundedCornerShape(50)),
+                    color = MaterialTheme.colorScheme.primary,
+                    trackColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+                    strokeCap = StrokeCap.Round
+                )
+            }
 
             Spacer(Modifier.height(4.dp))
 

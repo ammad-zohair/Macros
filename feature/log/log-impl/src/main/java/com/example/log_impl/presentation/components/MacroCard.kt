@@ -65,7 +65,7 @@ fun MacroCard(
         Spacer(Modifier.height(16.dp))
         if (isEditMode) {
             Slider(
-                value = macro.progress,
+                value = sliderPosition,
                 onValueChange = {
                     sliderPosition = it
                     onMacroSliderChange(it)

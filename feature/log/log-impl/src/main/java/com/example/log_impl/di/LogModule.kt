@@ -12,6 +12,6 @@ import org.koin.dsl.module
 
 val logModule = module {
     single<LogRepository> { LogRepositoryImpl(get()) }
-    viewModel { LogViewModel(get()) }
+    viewModel { LogViewModel(logRepository = get(), targetPreferences = get()) }
     single<EntryProviderScope<NavKey>.() -> Unit>(named("logEntry")) { { logEntry(get()) } }
 }

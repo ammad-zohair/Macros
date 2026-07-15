@@ -1,7 +1,7 @@
 package com.example.log_impl.presentation
 
 import com.ammad.shared.base.BaseState
-import com.example.log_api.domain.model.Log
+import com.example.log_api.domain.model.LogEntryDisplay
 import com.example.log_api.domain.model.MacroDisplay
 import java.time.LocalDate
 
@@ -16,5 +16,5 @@ data class LogState(
     val calorieProgress: Float = 0.0f,
     val isEdit: Boolean = false,
     val macros: List<MacroDisplay> = emptyList(),
-    val entries: List<Log> = emptyList()
+    val entries: List<LogEntryDisplay> = emptyList()
 ) : BaseState

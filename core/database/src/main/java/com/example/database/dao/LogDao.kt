@@ -1,6 +1,7 @@
 package com.example.database.dao
 
 import androidx.room3.Dao
+import androidx.room3.Delete
 import androidx.room3.Insert
 import androidx.room3.OnConflictStrategy
 import androidx.room3.Query
@@ -28,4 +29,7 @@ interface LogDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertLog(logEntity: LogEntity)
+
+    @Delete
+    suspend fun deleteLog(logEntity: LogEntity)
 }

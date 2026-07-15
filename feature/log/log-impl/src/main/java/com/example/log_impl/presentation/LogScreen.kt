@@ -1,6 +1,5 @@
 package com.example.log_impl.presentation
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -13,10 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Done
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Error
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,14 +21,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.design_system.components.CustomButton
 import com.example.design_system.components.EmptyView
-import com.example.log_api.domain.model.Log
+import com.example.log_api.domain.model.LogEntryDisplay
+import com.example.log_api.domain.model.MacroDisplay
+import com.example.log_impl.data.mapper.toDateText
+import com.example.log_impl.data.mapper.toDayLabel
 import com.example.log_impl.presentation.components.DailyGoalCard
 import com.example.log_impl.presentation.components.DateSelector
 import com.example.log_impl.presentation.components.FoodLogItem
 import com.example.log_impl.presentation.components.MacroBlocks
-import com.example.log_api.domain.model.MacroDisplay
-import com.example.log_impl.data.mapper.toDateText
-import com.example.log_impl.data.mapper.toDayLabel
 
 @Composable
 fun LogScreen(
@@ -56,8 +52,11 @@ fun LogScreen(
         onNextDay = { onIntent(LogIntent.NextDay) },
         onAddFoodClick = { onIntent(LogIntent.AddFood) },
         onGoBack = { onIntent(LogIntent.GoBack) },
+        onEditClick = { onIntent(LogIntent.OnEditClick) },
+        onDeleteClick = { onIntent(LogIntent.OnDeleteClick(it)) },
         onProteinSliderChange = { onIntent(LogIntent.ProteinTargetChange(it)) },
         onCarbohydrateSliderChange = { onIntent(LogIntent.CarbohydrateTargetChange(it)) },
+        onCaloriesSliderChange = { onIntent(LogIntent.CaloriesTargetChange(it)) },
         modifier = modifier.padding(paddingValues),
     )
 }
@@ -65,7 +64,7 @@ fun LogScreen(
 @Composable
 private fun LogDetailScreen(
     isEditMode: Boolean,
-    dailyLogEntries: List<Log>,
+    dailyLogEntries: List<LogEntryDisplay>,
     macros: List<MacroDisplay>,
     dayLabel: String?,
     dateText: String,
@@ -78,8 +77,11 @@ private fun LogDetailScreen(
     onNextDay: () -> Unit,
     onAddFoodClick: () -> Unit,
     onGoBack: () -> Unit,
+    onEditClick: () -> Unit,
+    onDeleteClick: (LogEntryDisplay) -> Unit,
     onProteinSliderChange: (Float) -> Unit,
     onCarbohydrateSliderChange: (Float) -> Unit,
+    onCaloriesSliderChange: (Float) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -98,7 +100,7 @@ private fun LogDetailScreen(
                 CustomButton(
                     icon = Icons.Default.Error,
                     buttonText = "Return",
-                    onClick = { onGoBack()}
+                    onClick = { onGoBack() }
                 )
             }
         }
@@ -112,9 +114,11 @@ private fun LogDetailScreen(
             )
 
             DailyGoalCard(
+                isEditMode = isEditMode,
                 consumedCalories = consumedCalories,
                 targetCalories = targetCalories,
-                progress = calorieProgress
+                progress = calorieProgress,
+                onMacroSliderChange = onCaloriesSliderChange
             )
 
             Spacer(Modifier.height(16.dp))
@@ -129,20 +133,15 @@ private fun LogDetailScreen(
                     style = MaterialTheme.typography.titleLarge,
                     color = MaterialTheme.colorScheme.onSurface
                 )
-                Row(
-                    modifier = Modifier
-                        .clickable(
-                            onClick = {
-
-                            }
-                        )
-                ) {
-                    Icon(
-                        imageVector = if (isEditMode) Icons.Default.Done else Icons.Default.Edit,
-                        tint = MaterialTheme.colorScheme.primary,
-                        contentDescription = null
-                    )
-                }
+//                Row(
+//                    modifier = Modifier.clickable(onClick = { onEditClick() })
+//                ) {
+//                    Icon(
+//                        imageVector = if (isEditMode) Icons.Default.Done else Icons.Default.Edit,
+//                        tint = MaterialTheme.colorScheme.primary,
+//                        contentDescription = null
+//                    )
+//                }
             }
 
             MacroBlocks(
@@ -173,7 +172,11 @@ private fun LogDetailScreen(
             }
 
             dailyLogEntries.forEach { entry ->
-                FoodLogItem(entry = entry)
+                FoodLogItem(
+                    isEditMode = isEditMode,
+                    entry = entry,
+                    onDeleteClick = onDeleteClick
+                )
             }
 
             Spacer(Modifier.height(8.dp))
