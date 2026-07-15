@@ -113,7 +113,10 @@ fun BottomSheet(
                     enter = fadeIn(animationSpec = tween(200)) + slideInHorizontally(),
                 ) {
                     CustomButton(
-                        onClick = { onIntent(SplashIntent.OnGetStartedClicked) },
+                        onClick = {
+                            onIntent(SplashIntent.OnGetStartedClicked)
+                            onIntent(SplashIntent.OnboardingCompleted)
+                        },
                         buttonText = "Get Started",
                         icon = Icons.Rounded.ArrowForward
                     )

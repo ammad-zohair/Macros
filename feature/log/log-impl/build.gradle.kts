@@ -37,6 +37,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.material.icons.core)
     implementation(libs.material.icons.extended)
+    implementation(libs.androidx.compose.foundation)
 
     //koin
     implementation(libs.koin.android)
@@ -50,6 +51,7 @@ dependencies {
     implementation(project(":core:database"))
     implementation(project(":core:shared"))
     implementation(project(":core:navigation"))
+    implementation(project(":core:datastore"))
     implementation(project(":core:design-system"))
     implementation(project(":core:design-system"))
     implementation(project(":feature:log:log-api"))

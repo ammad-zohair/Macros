@@ -28,6 +28,8 @@ runtimeSaveable = "1.11.3"
 foundationLayout = "1.11.3"
 uiText = "1.11.3"
 uiGraphics = "1.11.3"
+datastore = "1.2.1"
+foundation = "1.11.4"
 
 
 [libraries]
@@ -71,6 +73,8 @@ androidx-compose-runtime-saveable = { group = "androidx.compose.runtime", name =
 androidx-compose-foundation-layout = { group = "androidx.compose.foundation", name = "foundation-layout", version.ref = "foundationLayout" }
 androidx-compose-ui-text = { group = "androidx.compose.ui", name = "ui-text", version.ref = "uiText" }
 androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics", version.ref = "uiGraphics" }
+androidx-datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }
+androidx-compose-foundation = { group = "androidx.compose.foundation", name = "foundation", version.ref = "foundation" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

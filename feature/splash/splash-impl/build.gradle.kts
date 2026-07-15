@@ -51,6 +51,7 @@ dependencies {
     //modules
     implementation(project(":core:shared"))
     implementation(project(":core:design-system"))
+    implementation(project(":core:datastore"))
     implementation(project(":core:navigation"))
     implementation(project(":feature:splash:splash-api"))
     implementation(project(":feature:dashboard:dashboard-api"))
