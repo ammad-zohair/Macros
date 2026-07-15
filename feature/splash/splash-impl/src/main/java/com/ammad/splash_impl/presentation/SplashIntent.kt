@@ -4,4 +4,5 @@ import com.ammad.shared.base.BaseIntent
 
 sealed interface SplashIntent : BaseIntent {
     data object OnGetStartedClicked : SplashIntent
+    data object OnboardingCompleted : SplashIntent
 }

@@ -9,6 +9,6 @@ import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val splashModule = module {
-    viewModel { SplashViewModel() }
+    viewModel { SplashViewModel(get()) }
     single<EntryProviderScope<NavKey>.() -> Unit>(named("splashEntry")) { { splashEntry(get()) } }
 }

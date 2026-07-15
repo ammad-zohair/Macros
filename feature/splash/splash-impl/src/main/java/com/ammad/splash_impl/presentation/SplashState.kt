@@ -4,5 +4,6 @@ import com.ammad.shared.base.BaseState
 
 data class SplashState(
     override val isLoading: Boolean = false,
-    override val errorMessage: String? = null
+    override val errorMessage: String? = null,
+    val showOnboarding: Boolean = false
 ) : BaseState

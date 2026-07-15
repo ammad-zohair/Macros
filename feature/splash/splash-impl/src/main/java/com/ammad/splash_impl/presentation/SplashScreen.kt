@@ -45,34 +45,35 @@ fun SplashScreen(
     onIntent: (SplashIntent) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val pagerState = rememberPagerState { pages.size }
-
-    Box(
-        modifier = modifier.fillMaxSize(),
-    ) {
-        LaunchedEffect(key1 = pagerState.currentPage) {
-            launch {
-                delay(3000.milliseconds)
-                with(pagerState) {
-                    val target = if (currentPage < pages.size - 1) currentPage + 1 else 0
-                    animateScrollToPage(
-                        page = target, animationSpec = tween(
-                            durationMillis = 0, easing = FastOutLinearInEasing
+    if (state.showOnboarding) {
+        val pagerState = rememberPagerState { pages.size }
+        Box(
+            modifier = modifier.fillMaxSize(),
+        ) {
+            LaunchedEffect(key1 = pagerState.currentPage) {
+                launch {
+                    delay(3000.milliseconds)
+                    with(pagerState) {
+                        val target = if (currentPage < pages.size - 1) currentPage + 1 else 0
+                        animateScrollToPage(
+                            page = target, animationSpec = tween(
+                                durationMillis = 0, easing = FastOutLinearInEasing
+                            )
                         )
-                    )
+                    }
                 }
             }
-        }
 
-        IntroPager(
-            pages = pages,
-            pagerState = pagerState
-        )
-        BottomSheet(
-            pagerState = pagerState,
-            onIntent = onIntent,
-            pages = pages,
-            modifier = Modifier.align(Alignment.BottomCenter)
-        )
+            IntroPager(
+                pages = pages,
+                pagerState = pagerState
+            )
+            BottomSheet(
+                pagerState = pagerState,
+                onIntent = onIntent,
+                pages = pages,
+                modifier = Modifier.align(Alignment.BottomCenter)
+            )
+        }
     }
 }
